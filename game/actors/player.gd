@@ -10,6 +10,7 @@ var state := State.PHYSICAL
 var input_enabled := true
 var shadow_system
 var mission
+var combat_system
 var current_anchor
 var visual
 var aim_direction := Vector2.RIGHT
@@ -18,6 +19,9 @@ var attack_buffer := 0.0
 var attack_phase := 0.0
 var has_gate_key := false
 var eject_timer := -1.0
+var attack_elapsed := -1.0
+var attack_direction := Vector2.RIGHT
+var swing_hits: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group("player")
@@ -54,6 +58,8 @@ func attach_anchor(anchor: Node) -> void:
 	collision_mask = 0
 	attack_buffer = 0.0
 	attack_phase = 0.0
+	attack_elapsed = -1.0
+	visual.attacking = false
 	eject_timer = -1.0
 	visual.visible = false
 	shifted.emit(from_pos, global_position)
@@ -76,9 +82,52 @@ func finish_emerge(at: Vector2) -> void:
 	emerged.emit()
 
 func request_attack() -> bool:
+	if state == State.RIDING and is_instance_valid(current_anchor) and is_instance_valid(current_anchor.owner_actor):
+		var victim = current_anchor.owner_actor
+		if victim.has_method("take_hit") and victim.is_alive():
+			victim.take_hit(self)
+			shadow_system.try_emerge(self, true)
+			return true
 	if state != State.PHYSICAL:
 		return false
 	attack_buffer = 0.12
+	if attack_elapsed < 0.0:
+		_start_attack()
+	return true
+
+func _start_attack() -> void:
+	attack_buffer = 0.0
+	attack_elapsed = 0.0
+	attack_direction = aim_direction
+	swing_hits.clear()
+	visual.attacking = true
+	attack_started.emit()
+
+func _tick_attack(delta: float) -> void:
+	attack_buffer = maxf(0.0, attack_buffer - delta)
+	if attack_elapsed < 0.0:
+		return
+	attack_elapsed += delta
+	if attack_elapsed >= 0.04 and attack_elapsed <= 0.14 and is_instance_valid(combat_system):
+		combat_system.resolve_swing(self, global_position, attack_direction, 42.0, 110.0, swing_hits)
+	if attack_elapsed >= 0.32:
+		attack_elapsed = -1.0
+		visual.attacking = false
+		if attack_buffer > 0.0:
+			_start_attack()
+	queue_redraw()
+
+func take_hit(source: Node) -> bool:
+	if state != State.PHYSICAL:
+		return false
+	state = State.DEAD
+	collision_layer = 0
+	collision_mask = 0
+	velocity = Vector2.ZERO
+	attack_elapsed = -1.0
+	visual.dead = true
+	visual.attacking = false
+	died.emit(source)
 	return true
 
 func handle_primary(shift_held: bool, target: Vector2) -> void:
@@ -129,6 +178,7 @@ func _physics_process(delta: float) -> void:
 				if not shadow_system.try_emerge(self, true):
 					eject_timer = 0.2
 		return
+	_tick_attack(delta)
 	var movement := Vector2.ZERO
 	if input_enabled:
 		movement.x = float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT))
@@ -136,9 +186,15 @@ func _physics_process(delta: float) -> void:
 		var mouse_offset := get_global_mouse_position() - global_position
 		if mouse_offset.length_squared() > 4.0:
 			aim_direction = mouse_offset.normalized()
-	var target_velocity := movement.normalized() * 140.0
+	var target_velocity := movement.normalized() * 140.0 * (0.65 if attack_elapsed >= 0.0 else 1.0)
 	velocity = velocity.move_toward(target_velocity, (1200.0 if movement != Vector2.ZERO else 1800.0) * delta)
 	move_and_slide()
 	last_safe_position = global_position
 	visual.facing = aim_direction
 	visual.moving = velocity.length_squared() > 4.0
+
+func _draw() -> void:
+	if attack_elapsed >= 0.04 and attack_elapsed <= 0.2:
+		var t := clampf((attack_elapsed - 0.04) / 0.16, 0.0, 1.0)
+		var start := attack_direction.angle() - 1.05 + t * 1.5
+		draw_arc(Vector2.ZERO, 27.0 + 9.0 * t, start, start + 1.35, 16, Color(0.76, 0.9, 1.0, 1.0 - t), 3.0)

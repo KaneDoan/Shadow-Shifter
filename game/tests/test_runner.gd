@@ -21,6 +21,8 @@ func _run() -> void:
 		_test_rules()
 	if suite in ["shadow", "all"]:
 		await _test_shadow()
+	if suite in ["combat", "all"]:
+		await _test_combat()
 	print("TEST RESULT: ", assertions - failures, "/", assertions, " passed; failures=", failures)
 	quit(0 if failures == 0 else 1)
 
@@ -150,4 +152,142 @@ func _test_shadow() -> void:
 	check(not player.is_hidden(), "fading occupied anchor safely ejects after warning")
 	check(system.position_clear(player, player.global_position), "forced ejection chooses a clear position")
 	stage.queue_free()
+	await settle()
+
+func _test_combat() -> void:
+	for path in ["res://systems/combat_system.gd", "res://actors/enemy.gd", "res://actors/projectile.gd"]:
+		if not FileAccess.file_exists(path):
+			check(false, "Combat module exists: " + path)
+			return
+	var stage := Node2D.new()
+	root.add_child(stage)
+	var shadows = load("res://systems/shadow_system.gd").new()
+	stage.add_child(shadows)
+	var combat = load("res://systems/combat_system.gd").new()
+	stage.add_child(combat)
+	var player = load("res://actors/player.gd").new()
+	player.position = Vector2(100, 100)
+	player.input_enabled = false
+	player.shadow_system = shadows
+	player.combat_system = combat
+	shadows.player = player
+	stage.add_child(player)
+	var enemy_script = load("res://actors/enemy.gd")
+	var front = enemy_script.new()
+	front.position = Vector2(130, 100)
+	front.ai_enabled = false
+	front.shadow_system = shadows
+	stage.add_child(front)
+	var behind = enemy_script.new()
+	behind.position = Vector2(75, 100)
+	behind.ai_enabled = false
+	stage.add_child(behind)
+	var distant = enemy_script.new()
+	distant.position = Vector2(160, 100)
+	distant.ai_enabled = false
+	stage.add_child(distant)
+	await settle()
+	var hit_ids: Dictionary = {}
+	check(combat.resolve_swing(player, player.global_position, Vector2.RIGHT, 42.0, 110.0, hit_ids) == 1, "sword kills one target in forward arc")
+	check(not front.is_alive(), "one sword hit kills enemy")
+	check(behind.is_alive() and distant.is_alive(), "behind and out-of-range targets survive")
+	check(combat.resolve_swing(player, player.global_position, Vector2.RIGHT, 42.0, 110.0, hit_ids) == 0, "active swing cannot hit the same target twice")
+	var protected = enemy_script.new()
+	protected.position = Vector2(130, 100)
+	protected.ai_enabled = false
+	stage.add_child(protected)
+	var wall := make_wall(Vector2(116, 100), Vector2(8, 50))
+	stage.add_child(wall)
+	await settle()
+	check(combat.resolve_swing(player, player.global_position, Vector2.RIGHT, 42.0, 110.0, {}) == 0, "wall blocks sword hit")
+	check(protected.is_alive(), "enemy behind wall survives")
+	wall.queue_free()
+	await settle()
+	player.aim_direction = Vector2.RIGHT
+	player.request_attack()
+	player._tick_attack(0.02)
+	check(protected.is_alive(), "wind-up is not a damaging interval")
+	player._tick_attack(0.04)
+	check(not protected.is_alive(), "active interval resolves actual buffered sword")
+	player.attach_anchor(front.shadow_anchor)
+	check(not player.take_hit(behind), "hidden player ignores hit")
+	check(player.is_alive(), "hidden hit is nonlethal")
+	player.finish_emerge(Vector2(140, 200))
+	var bullet_wall := make_wall(Vector2(115, 200), Vector2(8, 50))
+	stage.add_child(bullet_wall)
+	await settle()
+	var projectile = load("res://actors/projectile.gd").new()
+	projectile.position = Vector2(90, 200)
+	projectile.direction = Vector2.RIGHT
+	stage.add_child(projectile)
+	projectile.set_physics_process(false)
+	projectile._physics_process(0.25)
+	check(player.is_alive(), "swept projectile hits wall before player")
+	await settle()
+	bullet_wall.queue_free()
+	await settle()
+	check(player.take_hit(behind), "physical player accepts a lethal hit")
+	check(not player.is_alive(), "one enemy hit kills physical player")
+	check(not player.take_hit(behind), "dead player cannot be killed or signaled twice")
+	stage.queue_free()
+	await settle()
+	var ride_stage := Node2D.new()
+	root.add_child(ride_stage)
+	var ride_system = load("res://systems/shadow_system.gd").new()
+	ride_stage.add_child(ride_system)
+	var rider = load("res://actors/player.gd").new()
+	rider.position = Vector2(100, 100)
+	rider.input_enabled = false
+	rider.shadow_system = ride_system
+	ride_system.player = rider
+	ride_stage.add_child(rider)
+	var victim = enemy_script.new()
+	victim.position = Vector2(140, 100)
+	victim.ai_enabled = false
+	victim.shadow_system = ride_system
+	ride_stage.add_child(victim)
+	await settle()
+	check(rider.request_shift(victim.shadow_anchor), "living enemy can carry rider")
+	check(rider.request_attack(), "riding attack performs assassination")
+	check(not victim.is_alive() and not victim.shadow_anchor.active, "assassination kills owner and invalidates shadow")
+	check(not rider.is_hidden(), "riding kill exposes player immediately")
+	check(rider.global_position.distance_to(victim.global_position) < 16.1, "riding kill emerges at body")
+	ride_stage.queue_free()
+	await settle()
+	var attack_stage := Node2D.new()
+	root.add_child(attack_stage)
+	var target_player = load("res://actors/player.gd").new()
+	target_player.position = Vector2(130, 100)
+	target_player.input_enabled = false
+	attack_stage.add_child(target_player)
+	var attacker = enemy_script.new()
+	attacker.position = Vector2(100, 100)
+	attacker.ai_enabled = false
+	attacker.player = target_player
+	attack_stage.add_child(attacker)
+	await settle()
+	check(target_player.is_alive(), "ordinary enemy contact and presence do not cause damage")
+	attacker.attack_direction = Vector2.RIGHT
+	attacker.attack_elapsed = 0.0
+	attacker._tick_attack(0.25)
+	check(target_player.is_alive(), "enemy wind-up is a safe reaction window")
+	attacker._tick_attack(0.22)
+	check(not target_player.is_alive(), "active enemy lunge is one-hit lethal")
+	attack_stage.queue_free()
+	await settle()
+	var shot_stage := Node2D.new()
+	root.add_child(shot_stage)
+	var shot_target = load("res://actors/player.gd").new()
+	shot_target.position = Vector2(140, 100)
+	shot_target.input_enabled = false
+	shot_stage.add_child(shot_target)
+	await settle()
+	var clear_shot = load("res://actors/projectile.gd").new()
+	clear_shot.position = Vector2(90, 100)
+	clear_shot.direction = Vector2.RIGHT
+	shot_stage.add_child(clear_shot)
+	clear_shot.set_physics_process(false)
+	clear_shot._physics_process(0.25)
+	check(not shot_target.is_alive(), "unobstructed swept projectile kills exposed player")
+	shot_stage.queue_free()
 	await settle()

@@ -53,6 +53,10 @@ func position_clear(actor: Node, point: Vector2) -> bool:
 	query.transform = Transform2D(0.0, point)
 	query.collision_mask = 5
 	query.exclude = [actor.get_rid()]
+	if is_instance_valid(actor.current_anchor):
+		var owner = actor.current_anchor.owner_actor
+		if owner is CollisionObject2D and owner.has_method("is_alive") and not owner.is_alive():
+			query.exclude.append(owner.get_rid())
 	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 func try_emerge(actor: Node, forced: bool = false) -> bool:
