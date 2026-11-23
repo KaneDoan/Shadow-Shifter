@@ -26,7 +26,10 @@ var anchors: Dictionary = {}
 var enemies: Dictionary = {}
 var doors: Dictionary = {}
 var escape_curve: Curve2D
-var debug_label: Label
+var camera: Camera2D
+var fx_manager
+var audio_manager
+var ui
 
 func _ready() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -91,7 +94,7 @@ func _ready() -> void:
 		enemies[data["id"]] = enemy
 	enemies["veyr"].shadow_anchor.set_active(false)
 	player.attach_anchor(anchors["well"])
-	var camera := Camera2D.new()
+	camera = Camera2D.new()
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 7.0
 	camera.limit_left = 0
@@ -99,12 +102,65 @@ func _ready() -> void:
 	camera.limit_right = int(Data.BOUNDS.x)
 	camera.limit_bottom = int(Data.BOUNDS.y)
 	player.add_child(camera)
+	audio_manager = preload("res://presentation/audio_manager.gd").new()
+	audio_manager.enabled = not test_mode
+	add_child(audio_manager)
+	fx_manager = preload("res://presentation/fx_manager.gd").new()
+	fx_manager.mission = self
+	add_child(fx_manager)
+	player.shifted.connect(func(from_pos: Vector2, to_pos: Vector2):
+		fx_manager.shifted(from_pos, to_pos)
+		audio_manager.play("shift", -15.0))
+	player.attack_started.connect(func():
+		fx_manager.sword()
+		audio_manager.play("slash", -15.0))
+	feedback_event.connect(_present_feedback)
+	var post := CanvasLayer.new()
+	post.layer = 9
+	add_child(post)
+	var vignette := ColorRect.new()
+	vignette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var material := ShaderMaterial.new()
+	material.shader = preload("res://presentation/vignette.gdshader")
+	vignette.material = material
+	post.add_child(vignette)
 	var canvas := CanvasLayer.new()
+	canvas.layer = 20
 	add_child(canvas)
-	debug_label = Label.new()
-	debug_label.position = Vector2(14, 8)
-	debug_label.add_theme_font_size_override("font_size", 12)
-	canvas.add_child(debug_label)
+	ui = preload("res://ui/game_ui.gd").new()
+	ui.mission = self
+	canvas.add_child(ui)
+	if not test_mode and not stats.has_started:
+		phase = "title"
+		player.input_enabled = false
+		player.set_physics_process(false)
+		for enemy in enemies.values():
+			enemy.ai_enabled = false
+		ui.set_screen("title")
+	else:
+		begin_run()
+
+func begin_run() -> void:
+	if phase not in ["title", "playing"]:
+		return
+	phase = "playing"
+	stats.has_started = true
+	player.input_enabled = not test_mode
+	player.set_physics_process(true)
+	for enemy in enemies.values():
+		enemy.ai_enabled = enemy.is_alive()
+	ui.set_screen("playing")
+
+func _present_feedback(kind: String, at: Vector2, direction: Vector2) -> void:
+	if kind == "kill":
+		fx_manager.impact(at, direction)
+		audio_manager.play("impact", -9.0)
+	elif kind == "death":
+		fx_manager.spawn("impact", at, 0.65, 1.7)
+		audio_manager.play("death", -8.0)
+	else:
+		audio_manager.play(kind, -12.0)
 
 func _physics_process(delta: float) -> void:
 	if phase != "playing":
@@ -141,14 +197,6 @@ func _physics_process(delta: float) -> void:
 			fail("Lord Veyr escaped")
 	queue_redraw()
 
-func _process(_delta: float) -> void:
-	if is_instance_valid(debug_label):
-		debug_label.text = "SHADOWSHIFT  /  %s\n%s\n%s" % [level.zone_name(player.global_position), objective(), context_prompt()]
-		if alarm.active:
-			debug_label.text += "\nVEYR ESCAPES IN %.1f" % alarm.remaining
-		if phase != "playing":
-			debug_label.text += "\n" + (rank if phase == "won" else failure_reason) + "   [R] RESTART"
-
 func try_interact(actor: Node) -> bool:
 	if actor.is_hidden() or phase != "playing":
 		return false
@@ -173,6 +221,8 @@ func try_interact(actor: Node) -> bool:
 func request_guard_door(guard: Node) -> void:
 	var id: String = "gate" if guard.enemy_id == "gatekeeper" else ("study" if guard.enemy_id == "bodyguard" else "")
 	if not id.is_empty() and guard.global_position.distance_to(doors[id].global_position) < 80.0:
+		if not doors[id].is_open:
+			feedback_event.emit("door", doors[id].global_position, Vector2.ZERO)
 		doors[id].open_for(2.0)
 
 func confirm_detection(_guard: Node) -> void:
@@ -204,6 +254,7 @@ func _on_enemy_died(enemy: Node, source: Node) -> void:
 		key_position = enemy.global_position + Vector2(12, 0)
 
 func _on_player_died(source: Node) -> void:
+	feedback_event.emit("death", player.global_position, Vector2.ZERO)
 	var name_text: String = source.display_name if is_instance_valid(source) and source.get("display_name") != null else "a lethal strike"
 	fail("Cut down by " + name_text)
 
@@ -223,6 +274,7 @@ func win() -> void:
 	phase = "won"
 	rank = "Messy Success" if alarm.active else ("Ghost Assassin" if guards_killed == 0 else "Silent Blade")
 	stats.record_result(rank, elapsed)
+	audio_manager.play("win", -10.0)
 	_freeze_actors()
 	result_changed.emit()
 

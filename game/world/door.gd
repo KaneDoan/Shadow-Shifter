@@ -6,6 +6,7 @@ var is_open := false
 var locked := false
 var remaining := 0.0
 var collider: CollisionShape2D
+var door_texture: Texture2D = preload("res://assets/environment/doors_lever_chest_animation.png")
 
 func _ready() -> void:
 	add_to_group("doors")
@@ -60,12 +61,9 @@ func _physics_process(delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	var box := Rect2(-size * 0.5, size)
-	if is_open:
-		draw_rect(Rect2(box.position, Vector2(4, size.y)), Color("6c6886"))
-		return
-	draw_rect(box, Color("272c40"))
-	draw_rect(box.grow(-2), Color("51465d"), false, 2.0)
-	for y in range(int(-size.y * 0.5) + 4, int(size.y * 0.5), 8):
-		draw_line(Vector2(-size.x * 0.5 + 2, y), Vector2(size.x * 0.5 - 2, y), Color("84707c"), 1.0)
-	draw_circle(Vector2(0, 0), 2, Color("e3bd68") if locked else Color("a9b3bd"))
+	draw_set_transform(Vector2.ZERO, -PI * 0.5)
+	var region := Rect2(128 if is_open else 0, 0 if door_id == "gate" else 32, 32, 32)
+	draw_texture_rect_region(door_texture, Rect2(-size.y * 0.5, -16, size.y, 32), region, Color(0.78, 0.8, 0.94))
+	draw_set_transform(Vector2.ZERO)
+	if locked and not is_open:
+		draw_circle(Vector2(0, 0), 2, Color("e3bd68"))

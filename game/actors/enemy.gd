@@ -45,6 +45,7 @@ func _ready() -> void:
 	add_child(collider)
 	visual = preload("res://actors/actor_visual.gd").new()
 	visual.role = visual_role
+	visual.tint = Color(0.96, 0.77, 1.0) if is_boss else (Color(1.0, 0.9, 0.72) if attack_style == "shot" else Color(1.0, 0.67, 0.65))
 	visual.accent = Color("e8bb70") if not is_boss else Color("f7b3d8")
 	add_child(visual)
 	shadow_anchor = preload("res://world/shadow_anchor.gd").new()
@@ -142,16 +143,20 @@ func _tick_patrol(delta: float) -> void:
 	if patrol_points.is_empty():
 		return
 	var target := patrol_points[patrol_index]
-	var offset := target - global_position
-	if offset.length() <= maxf(2.0, patrol_speed * delta):
+	var to_target := target - global_position
+	if to_target.length() <= maxf(2.0, patrol_speed * delta):
 		global_position = target
 		wait_timer = patrol_waits[patrol_index] if patrol_index < patrol_waits.size() else 0.4
 		if patrol_index < patrol_faces.size() and patrol_faces[patrol_index] != Vector2.ZERO:
 			facing = patrol_faces[patrol_index]
 		patrol_index = (patrol_index + 1) % patrol_points.size()
 	else:
+		var waypoint: Vector2 = target
+		if is_instance_valid(mission) and not _clear_attack_line(target):
+			waypoint = mission.level.navigation_target(global_position, target)
+		var offset := waypoint - global_position
 		facing = offset.normalized()
-		velocity = facing * patrol_speed
+		velocity = facing * minf(patrol_speed, offset.length() / maxf(delta, 0.001))
 		move_and_slide()
 
 func _tick_attack(delta: float) -> void:

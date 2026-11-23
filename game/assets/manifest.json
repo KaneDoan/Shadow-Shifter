@@ -2,269 +2,359 @@
   {
     "file": "game\\assets\\characters\\assassin\\D_idle.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/D_Idle.png",
-    "sha256": "9121069927ab08abf06e63215e22a3b92e3d72e042d39bbde0f371c50aee69a4"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\D_walk.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/D_Walk.png",
-    "sha256": "164815852ebb8aa79b048b0507ec009a2625c79f8a95ac3fad39940631ecfc22"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\D_attack.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/D_Attack.png",
-    "sha256": "cb9b830c80b11c8727e79099f735d22a2806dc287d851301ecc7d933ba005f04"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\D_hurt.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/D_Hurt.png",
-    "sha256": "f164cb17ae13c7bd26fd400c98c7335eba6101be74fd9011f24c31d267c1d33b"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\D_death.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/D_Death.png",
-    "sha256": "b51ae05d852510462e568e2265f09f056bd1837a20beaafebd3fe129c017827a"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\S_idle.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/S_Idle.png",
-    "sha256": "893969dad823bfb5bc85cd419cb34aef7536686c5a1749f028654449650dbea8"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\S_walk.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/S_Walk.png",
-    "sha256": "4c139e7361f065ab12bd8b3d7d0bcfe1420e858a0c2a1724f138fe8aff9366b1"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\S_attack.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/S_Attack.png",
-    "sha256": "bf0d724768c027c5aefce7495e0536fc3abdc02c2cd5b16a90906802895fd3e4"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\S_hurt.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/S_Hurt.png",
-    "sha256": "292b82bdc7bcc0abc437bd8cfe874a4a6efd187eb5ea129359c974780ae32414"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\S_death.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/S_Death.png",
-    "sha256": "7fd3dcba25c014df99f3182b7a332454fd1112c37708f23c2f233ee8421eac30"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\U_idle.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/U_Idle.png",
-    "sha256": "ed26a6ff7b382041498413edc84e756ebbc5fa4c433a026dd62c0276464bf3d5"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\U_walk.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/U_Walk.png",
-    "sha256": "d904c5c5f6fae35ae49eb35bfd4dfd9cf169c57b0d2bffe63320f7b360fe23b5"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\U_attack.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/U_Attack.png",
-    "sha256": "1c9f292f351ac0942fd33bf98af803880e58541c4fe3f7d74f6ec45aff3a3c41"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\U_hurt.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/U_Hurt.png",
-    "sha256": "245b6eb25501e0f956e0a9a26f21bee9aeb51130e4ff03fd77a4fe4b496fb1bd"
-  },
-  {
-    "file": "game\\assets\\characters\\assassin\\U_death.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
-    "member": "1 Characters/1/U_Death.png",
-    "sha256": "b87e72693e0bda1daf6ac97951778a54b5d6b9693ec3d71d65ff6ca4799cf454"
-  },
-  {
-    "file": "game\\assets\\characters\\watchman\\D_idle.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/D_Idle.png",
     "sha256": "6185e016e28b7ebcd2e3cbcc57cb728533db24a3b6483011edf8102864cb8892"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\D_walk.png",
+    "file": "game\\assets\\characters\\assassin\\D_walk.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/D_Walk.png",
     "sha256": "dac35aa03e779e73cf49bfc1ad1c9fcfde0f9ac0e625b500a1181d00cd414865"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\D_attack.png",
+    "file": "game\\assets\\characters\\assassin\\D_attack.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/D_Attack.png",
     "sha256": "a95672e533b2317be3917860e0bfb4f3cfa8307879743c846e47bfefd8f81d97"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\D_hurt.png",
+    "file": "game\\assets\\characters\\assassin\\D_hurt.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/D_Hurt.png",
     "sha256": "317812c466a970af8f47cdbfc7b6693efdb5a7e27a63d1e57038381f5c4bfaf2"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\D_death.png",
+    "file": "game\\assets\\characters\\assassin\\D_death.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/D_Death.png",
     "sha256": "67af82a36de2e982b9b4a715a2f1c96c575edc7525df6c9211ab7cf4fdf071a9"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\S_idle.png",
+    "file": "game\\assets\\characters\\assassin\\S_idle.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/S_Idle.png",
     "sha256": "aeef75276d81265629ab93b5215ee9f3d1dbc8a4b47e7d0adb8ecc2524319a1e"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\S_walk.png",
+    "file": "game\\assets\\characters\\assassin\\S_walk.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/S_Walk.png",
     "sha256": "f38ffc70654ed1d4dfbb1d8a86fee26ddcd296d7fca235f90c9062f04c039598"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\S_attack.png",
+    "file": "game\\assets\\characters\\assassin\\S_attack.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/S_Attack.png",
     "sha256": "7c901aeb197693798044034f8ea99534c9c5389f9cd208939223e5cfdb716b51"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\S_hurt.png",
+    "file": "game\\assets\\characters\\assassin\\S_hurt.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/S_Hurt.png",
     "sha256": "ec55c5860d9242c8fac9ab7f7b1ab5460d33ae2747cf2a6107c457ae941c23a4"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\S_death.png",
+    "file": "game\\assets\\characters\\assassin\\S_death.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/S_Death.png",
     "sha256": "4c0d1f6d8df5a6df25acff284c1ef191ba328a71638b218c3a11d42bd3d127f4"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\U_idle.png",
+    "file": "game\\assets\\characters\\assassin\\U_idle.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/U_Idle.png",
     "sha256": "4a0b59a8fdd1b13c7659238258eab08c4f6f5b3b429bbdb7e7fcf118720199fb"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\U_walk.png",
+    "file": "game\\assets\\characters\\assassin\\U_walk.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/U_Walk.png",
     "sha256": "07c105790f92affdc72a54796ca980f1ac0767aab0bcb35d68024223390601b5"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\U_attack.png",
+    "file": "game\\assets\\characters\\assassin\\U_attack.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/U_Attack.png",
     "sha256": "afe15f68baddc2f820a6f67af7ef12a37b5aa35bcde39c9ad1e077e57564ec0b"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\U_hurt.png",
+    "file": "game\\assets\\characters\\assassin\\U_hurt.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/U_Hurt.png",
     "sha256": "08bc7d894b97ce4f8b063bcd7b5b49aa20e198988ebf330e7099ceaf799688b6"
   },
   {
-    "file": "game\\assets\\characters\\watchman\\U_death.png",
+    "file": "game\\assets\\characters\\assassin\\U_death.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/2/U_Death.png",
     "sha256": "4a0b0dff8ba612bfce49efb4dbb1280ec80d9654fef266ed10dfd25b873d5f04"
   },
   {
+    "file": "game\\assets\\characters\\watchman\\D_idle.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/D_Idle.png",
+    "sha256": "9121069927ab08abf06e63215e22a3b92e3d72e042d39bbde0f371c50aee69a4"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\D_walk.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/D_Walk.png",
+    "sha256": "164815852ebb8aa79b048b0507ec009a2625c79f8a95ac3fad39940631ecfc22"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\D_attack.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/D_Attack.png",
+    "sha256": "cb9b830c80b11c8727e79099f735d22a2806dc287d851301ecc7d933ba005f04"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\D_hurt.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/D_Hurt.png",
+    "sha256": "f164cb17ae13c7bd26fd400c98c7335eba6101be74fd9011f24c31d267c1d33b"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\D_death.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/D_Death.png",
+    "sha256": "b51ae05d852510462e568e2265f09f056bd1837a20beaafebd3fe129c017827a"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\S_idle.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/S_Idle.png",
+    "sha256": "893969dad823bfb5bc85cd419cb34aef7536686c5a1749f028654449650dbea8"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\S_walk.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/S_Walk.png",
+    "sha256": "4c139e7361f065ab12bd8b3d7d0bcfe1420e858a0c2a1724f138fe8aff9366b1"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\S_attack.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/S_Attack.png",
+    "sha256": "bf0d724768c027c5aefce7495e0536fc3abdc02c2cd5b16a90906802895fd3e4"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\S_hurt.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/S_Hurt.png",
+    "sha256": "292b82bdc7bcc0abc437bd8cfe874a4a6efd187eb5ea129359c974780ae32414"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\S_death.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/S_Death.png",
+    "sha256": "7fd3dcba25c014df99f3182b7a332454fd1112c37708f23c2f233ee8421eac30"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\U_idle.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/U_Idle.png",
+    "sha256": "ed26a6ff7b382041498413edc84e756ebbc5fa4c433a026dd62c0276464bf3d5"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\U_walk.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/U_Walk.png",
+    "sha256": "d904c5c5f6fae35ae49eb35bfd4dfd9cf169c57b0d2bffe63320f7b360fe23b5"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\U_attack.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/U_Attack.png",
+    "sha256": "1c9f292f351ac0942fd33bf98af803880e58541c4fe3f7d74f6ec45aff3a3c41"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\U_hurt.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/U_Hurt.png",
+    "sha256": "245b6eb25501e0f956e0a9a26f21bee9aeb51130e4ff03fd77a4fe4b496fb1bd"
+  },
+  {
+    "file": "game\\assets\\characters\\watchman\\U_death.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/1/U_Death.png",
+    "sha256": "b87e72693e0bda1daf6ac97951778a54b5d6b9693ec3d71d65ff6ca4799cf454"
+  },
+  {
     "file": "game\\assets\\characters\\guard\\D_idle.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/D_Idle.png",
+    "sha256": "6185e016e28b7ebcd2e3cbcc57cb728533db24a3b6483011edf8102864cb8892"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\D_walk.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/D_Walk.png",
+    "sha256": "dac35aa03e779e73cf49bfc1ad1c9fcfde0f9ac0e625b500a1181d00cd414865"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\D_attack.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/D_Attack.png",
+    "sha256": "a95672e533b2317be3917860e0bfb4f3cfa8307879743c846e47bfefd8f81d97"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\D_hurt.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/D_Hurt.png",
+    "sha256": "317812c466a970af8f47cdbfc7b6693efdb5a7e27a63d1e57038381f5c4bfaf2"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\D_death.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/D_Death.png",
+    "sha256": "67af82a36de2e982b9b4a715a2f1c96c575edc7525df6c9211ab7cf4fdf071a9"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\S_idle.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/S_Idle.png",
+    "sha256": "aeef75276d81265629ab93b5215ee9f3d1dbc8a4b47e7d0adb8ecc2524319a1e"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\S_walk.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/S_Walk.png",
+    "sha256": "f38ffc70654ed1d4dfbb1d8a86fee26ddcd296d7fca235f90c9062f04c039598"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\S_attack.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/S_Attack.png",
+    "sha256": "7c901aeb197693798044034f8ea99534c9c5389f9cd208939223e5cfdb716b51"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\S_hurt.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/S_Hurt.png",
+    "sha256": "ec55c5860d9242c8fac9ab7f7b1ab5460d33ae2747cf2a6107c457ae941c23a4"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\S_death.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/S_Death.png",
+    "sha256": "4c0d1f6d8df5a6df25acff284c1ef191ba328a71638b218c3a11d42bd3d127f4"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\U_idle.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/U_Idle.png",
+    "sha256": "4a0b59a8fdd1b13c7659238258eab08c4f6f5b3b429bbdb7e7fcf118720199fb"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\U_walk.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/U_Walk.png",
+    "sha256": "07c105790f92affdc72a54796ca980f1ac0767aab0bcb35d68024223390601b5"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\U_attack.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/U_Attack.png",
+    "sha256": "afe15f68baddc2f820a6f67af7ef12a37b5aa35bcde39c9ad1e077e57564ec0b"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\U_hurt.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/U_Hurt.png",
+    "sha256": "08bc7d894b97ce4f8b063bcd7b5b49aa20e198988ebf330e7099ceaf799688b6"
+  },
+  {
+    "file": "game\\assets\\characters\\guard\\U_death.png",
+    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
+    "member": "1 Characters/2/U_Death.png",
+    "sha256": "4a0b0dff8ba612bfce49efb4dbb1280ec80d9654fef266ed10dfd25b873d5f04"
+  },
+  {
+    "file": "game\\assets\\characters\\boss\\D_idle.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/D_Idle.png",
     "sha256": "a74fbdceae442c0b1924bea3ca152a83c4d8a52f2ea84be7dfd7440f0af0a8dd"
   },
   {
-    "file": "game\\assets\\characters\\guard\\D_walk.png",
+    "file": "game\\assets\\characters\\boss\\D_walk.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/D_Walk.png",
     "sha256": "a1c3844765b2a833bebc60f4dfc66fda36f9d7d4d673b7998f0fd4cf35edbac1"
   },
   {
-    "file": "game\\assets\\characters\\guard\\D_attack.png",
+    "file": "game\\assets\\characters\\boss\\D_attack.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/D_Attack.png",
     "sha256": "07d5253b757928df24072abee0ee32fcf33a0855ad4bd3ba654e3fdef06736bf"
   },
   {
-    "file": "game\\assets\\characters\\guard\\D_hurt.png",
+    "file": "game\\assets\\characters\\boss\\D_hurt.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/D_Hurt.png",
     "sha256": "5359f0912d5a201239b5199cf90c752e05034d826f582a5f9ac72047ad62a972"
   },
   {
-    "file": "game\\assets\\characters\\guard\\D_death.png",
+    "file": "game\\assets\\characters\\boss\\D_death.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/D_Death.png",
     "sha256": "d16e415cc0c70c081d02ef49e4f9e62f3400b731a008742b3bc876ad620d8f2a"
   },
   {
-    "file": "game\\assets\\characters\\guard\\S_idle.png",
+    "file": "game\\assets\\characters\\boss\\S_idle.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/S_Idle.png",
     "sha256": "64bebefc239ee2aada91d3baa77f3575d6bd26fe373616e145184c678e38850e"
   },
   {
-    "file": "game\\assets\\characters\\guard\\S_walk.png",
+    "file": "game\\assets\\characters\\boss\\S_walk.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/S_Walk.png",
     "sha256": "09a8bf7b5dea37b913cc73c95c4655587bf96356c534580a35b1ec68c72727b2"
   },
   {
-    "file": "game\\assets\\characters\\guard\\S_attack.png",
+    "file": "game\\assets\\characters\\boss\\S_attack.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/S_Attack.png",
     "sha256": "9e2fdbfdbc6ec4af85a3d5a40556ed46cab22a017ade14c9ef3657131f648042"
   },
   {
-    "file": "game\\assets\\characters\\guard\\S_hurt.png",
+    "file": "game\\assets\\characters\\boss\\S_hurt.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/S_Hurt.png",
     "sha256": "45711274d41298865261260ab28093401e272510b88249189ebe38361307dcc3"
   },
   {
-    "file": "game\\assets\\characters\\guard\\S_death.png",
+    "file": "game\\assets\\characters\\boss\\S_death.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/S_Death.png",
     "sha256": "9c31b5b970d9ecd600408e525eea0a2ac7327e19aa88435f47be91751de7620e"
   },
   {
-    "file": "game\\assets\\characters\\guard\\U_idle.png",
+    "file": "game\\assets\\characters\\boss\\U_idle.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/U_Idle.png",
     "sha256": "efd4b54745d27592d39ba99361d3ac352b2ebf78a5beaf4a589fb561b4d6235d"
   },
   {
-    "file": "game\\assets\\characters\\guard\\U_walk.png",
+    "file": "game\\assets\\characters\\boss\\U_walk.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/U_Walk.png",
     "sha256": "1019e7afa9b0c2943e2cfb1ca7e93056557f6a5ce4fa4d9dc53cf8f9f95dc828"
   },
   {
-    "file": "game\\assets\\characters\\guard\\U_attack.png",
+    "file": "game\\assets\\characters\\boss\\U_attack.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/U_Attack.png",
     "sha256": "310a8e54c8138ddee60da715e183d6cd09ff214dbfc34ae89dd83273b7b9362a"
   },
   {
-    "file": "game\\assets\\characters\\guard\\U_hurt.png",
+    "file": "game\\assets\\characters\\boss\\U_hurt.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/U_Hurt.png",
     "sha256": "9c766d9dd9baa019613409aa360bb9673c1514ff272440471f492705fe5d9023"
   },
   {
-    "file": "game\\assets\\characters\\guard\\U_death.png",
+    "file": "game\\assets\\characters\\boss\\U_death.png",
     "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-top-down-roguelike-game-kit-pixel-art\\craftpix-net-436971-free-top-down-roguelike-game-kit-pixel-art.zip",
     "member": "1 Characters/3/U_Death.png",
     "sha256": "1d3d601dd9a21114450a5ca6bac9efa7e2d00c9fd4c233c03fde97ba03f9013a"

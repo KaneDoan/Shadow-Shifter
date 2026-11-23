@@ -5,5 +5,9 @@
 *.md text eol=lf
 *.py text eol=lf
 *.mjs text eol=lf
+*.uid text eol=lf
+*.import text eol=lf
+*.cfg text eol=lf
+*.gdshader text eol=lf
 *.png binary
 *.wav binary

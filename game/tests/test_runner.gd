@@ -26,6 +26,14 @@ func _run() -> void:
 	if suite in ["mission", "all"]:
 		_test_alarm()
 		await _test_mission()
+	if suite in ["presentation", "all"]:
+		await _test_presentation()
+	if suite in ["input", "all"]:
+		await _test_input()
+	if suite in ["navigation", "all"]:
+		await _test_navigation()
+	if assertions == 0:
+		check(false, "test suite executes at least one assertion")
 	print("TEST RESULT: ", assertions - failures, "/", assertions, " passed; failures=", failures)
 	quit(0 if failures == 0 else 1)
 
@@ -463,3 +471,160 @@ func complete_lethal_gate_route(mission: Node) -> bool:
 	if not player.request_shift(mission.anchors["statue"]):
 		return false
 	return await finish_from_statue(mission)
+
+func _test_presentation() -> void:
+	for path in ["res://presentation/fx_manager.gd", "res://ui/game_ui.gd"]:
+		if not FileAccess.file_exists(path):
+			check(false, "Presentation module exists: " + path)
+			return
+	var mission = load("res://main.tscn").instantiate()
+	mission.test_mode = true
+	root.add_child(mission)
+	current_scene = mission
+	await settle()
+	mission.confirm_detection(mission.enemies["gatekeeper"])
+	var shot = load("res://actors/projectile.gd").new()
+	shot.position = Vector2(512, 600)
+	mission.world.add_child(shot)
+	await settle()
+	var timer_before: float = mission.alarm.remaining
+	var guard_before: Vector2 = mission.enemies["gatekeeper"].global_position
+	var shot_before: Vector2 = shot.global_position
+	mission.ui.pause_game()
+	await create_timer(0.12, true, false, true).timeout
+	check(paused, "pause UI pauses scene tree")
+	check(mission.alarm.remaining == timer_before, "pause freezes escape timer")
+	check(mission.enemies["gatekeeper"].global_position == guard_before, "pause freezes enemy motion")
+	check(shot.global_position == shot_before, "pause freezes projectiles")
+	mission.ui.resume_game()
+	check(not paused, "pause UI resumes scene tree")
+	mission.fx_manager.request_hitstop(0.045)
+	check(Engine.time_scale < 1.0, "impact hit-stop begins")
+	await create_timer(0.09, true, false, true).timeout
+	check(is_equal_approx(Engine.time_scale, 1.0), "hit-stop restores time scale using real time")
+	mission.player.finish_emerge(Vector2(100, 720))
+	mission.player.request_attack()
+	mission.player._tick_attack(0.06)
+	mission.fx_manager.request_hitstop(0.045)
+	var restart_before: int = mission.stats.restarts
+	mission.ui.pause_game()
+	mission.request_restart()
+	await settle()
+	await settle()
+	mission = current_scene
+	check(not paused and is_equal_approx(Engine.time_scale, 1.0), "restart during paused hit-stop remains responsive")
+	check(mission.phase == "playing" and mission.player.is_hidden(), "restart restores playable hidden spawn")
+	check(mission.player.attack_elapsed < 0.0 and not mission.alarm.active, "restart clears attack and alarm")
+	check(get_nodes_in_group("projectiles").is_empty(), "restart removes old projectiles")
+	check(mission.stats.restarts == restart_before + 1, "paused restart counted once")
+	mission.queue_free()
+	current_scene = null
+	await settle()
+
+func emit_key(code: int, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = code
+	event.physical_keycode = code
+	event.pressed = pressed
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
+
+func emit_mouse(point: Vector2, pressed: bool, shift: bool = false) -> void:
+	var motion := InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	Input.parse_input_event(motion)
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+	event.position = point
+	event.global_position = point
+	event.pressed = pressed
+	event.shift_pressed = shift
+	Input.parse_input_event(event)
+	Input.flush_buffered_events()
+
+func _test_input() -> void:
+	var mission = load("res://main.tscn").instantiate()
+	mission.test_mode = true
+	root.add_child(mission)
+	current_scene = mission
+	await settle()
+	mission.phase = "title"
+	mission.ui.set_screen("title")
+	emit_mouse(Vector2(150, 239), true)
+	emit_mouse(Vector2(150, 239), false)
+	await process_frame
+	check(mission.phase == "playing", "title button receives mouse press and release")
+	mission.phase = "title"
+	mission.ui.set_screen("title")
+	emit_key(KEY_ENTER, true)
+	emit_key(KEY_ENTER, false)
+	await process_frame
+	check(mission.phase == "playing" and mission.ui.screen_mode == "playing", "Enter input starts title screen")
+	mission.player.input_enabled = true
+	emit_key(KEY_E, true)
+	emit_key(KEY_E, false)
+	await settle()
+	check(not mission.player.is_hidden(), "E input emerges from shadow")
+	var before_x: float = mission.player.global_position.x
+	emit_key(KEY_D, true)
+	for frame in range(12):
+		await physics_frame
+	emit_key(KEY_D, false)
+	await settle()
+	check(mission.player.global_position.x > before_x + 3.0, "D input drives actual physical movement")
+	var point: Vector2 = mission.get_viewport().get_canvas_transform() * (mission.player.global_position + Vector2(30, 0))
+	emit_mouse(point, true)
+	emit_mouse(point, false)
+	await process_frame
+	check(mission.player.attack_elapsed >= 0.0, "mouse input starts sword action")
+	emit_key(KEY_SHIFT, true)
+	var anchor_point: Vector2 = mission.get_viewport().get_canvas_transform() * mission.anchors["crate"].global_position
+	emit_mouse(anchor_point, true, true)
+	emit_mouse(anchor_point, false, true)
+	await settle()
+	check(mission.player.current_anchor == mission.anchors["crate"], "Shift plus mouse input selects clicked world anchor")
+	check(mission.player.attack_elapsed < 0.0 and mission.player.attack_buffer == 0.0, "shift input cancels sword and its buffer")
+	emit_key(KEY_SHIFT, false)
+	emit_key(KEY_ESCAPE, true)
+	emit_key(KEY_ESCAPE, false)
+	await process_frame
+	check(paused and mission.ui.screen_mode == "pause", "Escape input opens pause")
+	emit_key(KEY_ESCAPE, true)
+	emit_key(KEY_ESCAPE, false)
+	await process_frame
+	check(not paused and mission.ui.screen_mode == "playing", "Escape input resumes while paused")
+	var before_restarts: int = mission.stats.restarts
+	emit_key(KEY_R, true)
+	emit_key(KEY_R, false)
+	await settle()
+	await settle()
+	mission = current_scene
+	check(mission.stats.restarts == before_restarts + 1, "R input requests exactly one restart")
+	check(mission.player.is_hidden() and mission.phase == "playing", "R input restores safe playable spawn")
+	mission.queue_free()
+	current_scene = null
+	await settle()
+
+func _test_navigation() -> void:
+	var mission = load("res://main.tscn").instantiate()
+	mission.test_mode = true
+	root.add_child(mission)
+	current_scene = mission
+	await settle()
+	Engine.time_scale = 8.0
+	var guard = mission.enemies["bodyguard"]
+	guard.global_position = Vector2(592, 128)
+	guard.patrol_points.assign([Vector2(688, 528)])
+	guard.patrol_waits.assign([0.2])
+	guard.patrol_faces.assign([Vector2.DOWN])
+	guard.patrol_index = 0
+	guard.wait_timer = 0.0
+	guard.mode = guard.Mode.ALERT
+	var returned: bool = await wait_for(func(): return guard.global_position.distance_to(Vector2(688, 528)) < 8.0, 25.0)
+	check(returned, "alert guard routes out of alcove around walls to resume patrol")
+	Engine.time_scale = 1.0
+	mission.queue_free()
+	current_scene = null
+	await settle()

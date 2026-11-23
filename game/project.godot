@@ -6,6 +6,7 @@ config/name="ShadowShift"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/description="Ride the dark. Strike once. Leave no witness."
+config/icon="res://assets/icon.svg"
 
 [autoload]
 RunStats="*res://core/run_stats.gd"

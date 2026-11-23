@@ -1,0 +1,56 @@
+[
+  {
+    "name": "slash",
+    "id": "melee/sword-slash",
+    "options": {},
+    "source": "D:/Pixelfx",
+    "contact_sheet": "D:\\Game Project\\Shadow Shifter\\captures\\fx\\melee\\sword-slash\\contact.png",
+    "license": "MIT; see retained notices"
+  },
+  {
+    "name": "shift",
+    "id": "spawn/poof",
+    "options": {
+      "palette": [
+        "#100e29",
+        "#30204f",
+        "#653fa1",
+        "#aa75dc",
+        "#a8ecf5",
+        "#f3f5ff"
+      ],
+      "stars": [
+        "#7849b4",
+        "#b990ef",
+        "#d6ffff"
+      ]
+    },
+    "source": "D:/Pixelfx",
+    "contact_sheet": "D:\\Game Project\\Shadow Shifter\\captures\\fx\\spawn\\poof\\contact.png",
+    "license": "MIT; see retained notices"
+  },
+  {
+    "name": "impact",
+    "id": "impacts/bullet-impact",
+    "options": {},
+    "source": "D:/Pixelfx",
+    "contact_sheet": "D:\\Game Project\\Shadow Shifter\\captures\\fx\\impacts\\bullet-impact\\contact.png",
+    "license": "MIT; see retained notices"
+  },
+  {
+    "name": "shadow",
+    "id": "shadow/shadow-flames",
+    "options": {},
+    "source": "D:/Pixelfx",
+    "contact_sheet": "D:\\Game Project\\Shadow Shifter\\captures\\fx\\shadow\\shadow-flames\\contact.png",
+    "license": "MIT; see retained notices"
+  },
+  {
+    "name": "torch",
+    "id": "fire/torch",
+    "options": {},
+    "source": "D:/Pixelfx",
+    "contact_sheet": "D:\\Game Project\\Shadow Shifter\\captures\\fx\\fire\\torch\\contact.png",
+    "license": "MIT; see retained notices"
+  }
+]

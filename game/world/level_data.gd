@@ -30,5 +30,5 @@ static func guards() -> Array[Dictionary]:
 		{"id": "courtyard_sentry", "name": "Courtyard Sentry", "at": Vector2(272, 496), "style": "blade", "points": [Vector2(272, 496), Vector2(304, 496)], "waits": [1.5, 1.5], "faces": [Vector2.RIGHT, Vector2.RIGHT]},
 		{"id": "gallery_sentry", "name": "Gallery Sentry", "at": Vector2(704, 672), "style": "thrust", "points": [Vector2(704, 672)], "waits": [2.0], "faces": [Vector2.LEFT]},
 		{"id": "study_sentry", "name": "Study Sentry", "at": Vector2(1056, 208), "style": "shot", "visual": "watchman", "points": [Vector2(1056, 208)], "waits": [2.0], "faces": [Vector2.LEFT]},
-		{"id": "veyr", "name": "Lord Veyr", "at": Vector2(1008, 304), "style": "blade", "visual": "watchman", "boss": true, "points": [Vector2(1008, 304), Vector2(1008, 368)], "waits": [2.0, 2.0], "faces": [Vector2.LEFT, Vector2.UP]}
+		{"id": "veyr", "name": "Lord Veyr", "at": Vector2(1008, 304), "style": "blade", "visual": "boss", "boss": true, "points": [Vector2(1008, 304), Vector2(1008, 368)], "waits": [2.0, 2.0], "faces": [Vector2.LEFT, Vector2.UP]}
 	]

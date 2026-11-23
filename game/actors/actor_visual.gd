@@ -6,6 +6,7 @@ var moving := false
 var attacking := false
 var dead := false
 var accent := Color("b28aff")
+var tint := Color.WHITE
 var clock := 0.0
 var animation_key := ""
 var sheets: Dictionary = {}
@@ -19,7 +20,9 @@ func _ready() -> void:
 			sheets[key] = load("res://assets/characters/%s/%s.png" % [role, key])
 	sprite = Sprite2D.new()
 	sprite.hframes = 4
-	sprite.position = Vector2(0, -10)
+	sprite.position = Vector2(0, -20)
+	sprite.scale = Vector2(2, 2)
+	sprite.modulate = tint
 	add_child(sprite)
 
 func _process(delta: float) -> void:

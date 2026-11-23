@@ -24,7 +24,7 @@ def extract(pack, members):
             license_path.write_bytes(source.read('license.txt'))
 
 characters = []
-for number, role in [('1', 'assassin'), ('2', 'watchman'), ('3', 'guard')]:
+for number, role in [('2', 'assassin'), ('1', 'watchman'), ('2', 'guard'), ('3', 'boss')]:
     for direction in ['D', 'S', 'U']:
         for action in ['Idle', 'Walk', 'Attack', 'Hurt', 'Death']:
             characters.append((f'1 Characters/{number}/{direction}_{action}.png', f'characters/{role}/{direction}_{action.lower()}.png'))

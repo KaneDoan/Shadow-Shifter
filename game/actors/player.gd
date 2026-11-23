@@ -35,6 +35,7 @@ func _ready() -> void:
 	collider.shape = circle
 	add_child(collider)
 	visual = preload("res://actors/actor_visual.gd").new()
+	visual.tint = Color(0.8, 0.91, 1.0)
 	add_child(visual)
 	last_safe_position = global_position
 
