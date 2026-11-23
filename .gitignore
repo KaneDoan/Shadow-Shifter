@@ -1,0 +1,9 @@
+.superpowers/
+.worktrees/
+game/.godot/
+builds/
+captures/
+*.log
+/*.docx
+*.tmp
+
