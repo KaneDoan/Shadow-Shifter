@@ -101,6 +101,8 @@ func _input(event: InputEvent) -> void:
 		mission.request_restart()
 		get_viewport().set_input_as_handled()
 	elif key in [KEY_ENTER, KEY_SPACE] and screen_mode == "title":
+		if get_viewport().gui_get_focus_owner() != null:
+			return
 		_start()
 		get_viewport().set_input_as_handled()
 	elif key == KEY_F1 and screen_mode == "playing":

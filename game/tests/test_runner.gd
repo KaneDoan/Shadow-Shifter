@@ -282,6 +282,16 @@ func _test_combat() -> void:
 	attacker.attack_elapsed = 0.0
 	attacker._tick_attack(0.25)
 	check(target_player.is_alive(), "enemy wind-up is a safe reaction window")
+	if attacker.has_method("attack_warning_polygon"):
+		check(Geometry2D.is_point_in_polygon(Vector2.from_angle(deg_to_rad(30)) * 30.0, attacker.attack_warning_polygon()), "blade warning covers off-axis lethal area")
+		attacker.attack_style = "thrust"
+		check(Geometry2D.is_point_in_polygon(Vector2.from_angle(deg_to_rad(15)) * 45.0, attacker.attack_warning_polygon()), "thrust warning covers off-axis lethal area")
+		attacker.attack_style = "blade"
+		attacker.attack_elapsed = 0.58
+		check(attacker.attack_warning_polygon().is_empty(), "recovery does not show a lethal warning")
+		attacker.attack_elapsed = 0.25
+	else:
+		check(false, "melee warnings expose matching sector geometry and recovery phase")
 	attacker._tick_attack(0.22)
 	check(not target_player.is_alive(), "active enemy lunge is one-hit lethal")
 	attack_stage.queue_free()
@@ -502,6 +512,15 @@ func _test_presentation() -> void:
 	check(Engine.time_scale < 1.0, "impact hit-stop begins")
 	await create_timer(0.09, true, false, true).timeout
 	check(is_equal_approx(Engine.time_scale, 1.0), "hit-stop restores time scale using real time")
+	mission.fx_manager.set_process(false)
+	mission.fx_manager.request_hitstop(0.001)
+	await create_timer(0.02, true, false, true).timeout
+	mission.fx_manager.request_hitstop(0.001)
+	await create_timer(0.02, true, false, true).timeout
+	mission.fx_manager._process(0.0)
+	check(is_equal_approx(Engine.time_scale, 1.0), "overlapping impacts preserve baseline after missed render restoration")
+	Engine.time_scale = 1.0
+	mission.fx_manager.set_process(true)
 	mission.player.finish_emerge(Vector2(100, 720))
 	mission.player.request_attack()
 	mission.player._tick_attack(0.06)
@@ -558,6 +577,14 @@ func _test_input() -> void:
 	check(mission.phase == "playing", "title button receives mouse press and release")
 	mission.phase = "title"
 	mission.ui.set_screen("title")
+	mission.ui.buttons[1]["button"].grab_focus()
+	emit_key(KEY_ENTER, true)
+	emit_key(KEY_ENTER, false)
+	await process_frame
+	check(mission.ui.screen_mode == "help", "Enter activates the focused title action")
+	mission.ui.buttons[1]["button"].release_focus()
+	mission.phase = "title"
+	mission.ui.set_screen("title")
 	emit_key(KEY_ENTER, true)
 	emit_key(KEY_ENTER, false)
 	await process_frame
@@ -586,6 +613,26 @@ func _test_input() -> void:
 	await settle()
 	check(mission.player.current_anchor == mission.anchors["crate"], "Shift plus mouse input selects clicked world anchor")
 	check(mission.player.attack_elapsed < 0.0 and mission.player.attack_buffer == 0.0, "shift input cancels sword and its buffer")
+	for index in range(2):
+		mission.player.attach_anchor(mission.anchors["crate"])
+		var original = mission.enemies["watchman"]
+		original.ai_enabled = false
+		original.global_position = mission.anchors["crate"].global_position
+		if index == 1:
+			mission.player.attach_anchor(original.shadow_anchor)
+		var carrier = mission.enemies["gatekeeper" if index == 0 else "bodyguard"]
+		carrier.ai_enabled = false
+		carrier.global_position = mission.anchors["crate"].global_position + (Vector2(48, 0) if index == 0 else Vector2(0, -48))
+		await settle()
+		var carrier_point: Vector2 = mission.get_viewport().get_canvas_transform() * carrier.shadow_anchor.global_position
+		if index == 1:
+			emit_key(KEY_SPACE, true)
+		emit_mouse(carrier_point, true, true)
+		if index == 0:
+			emit_key(KEY_SPACE, true)
+		emit_key(KEY_SPACE, false)
+		emit_mouse(carrier_point, false, true)
+		check(carrier.is_alive() and original.is_alive() and mission.player.current_anchor == carrier.shadow_anchor and mission.player.attack_buffer == 0.0, "shift gesture wins over Space in event order " + str(index))
 	emit_key(KEY_SHIFT, false)
 	emit_key(KEY_ESCAPE, true)
 	emit_key(KEY_ESCAPE, false)

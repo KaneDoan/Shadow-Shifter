@@ -175,8 +175,8 @@ func _tick_attack(delta: float) -> void:
 		else:
 			velocity = attack_direction * 120.0
 			move_and_slide()
-			var reach := 52.0 if attack_style == "thrust" else 36.0
-			var angle := 40.0 if attack_style == "thrust" else 90.0
+			var reach := attack_reach()
+			var angle := attack_arc()
 			if is_instance_valid(player) and player.is_alive() and not player.is_hidden():
 				if Rules.in_cone(global_position, attack_direction, player.global_position, reach, angle) and _clear_attack_line(player.global_position):
 					player.take_hit(self)
@@ -185,6 +185,23 @@ func _tick_attack(delta: float) -> void:
 
 func _clear_attack_line(point: Vector2) -> bool:
 	return get_world_2d().direct_space_state.intersect_ray(PhysicsRayQueryParameters2D.create(global_position, point, 1)).is_empty()
+
+func attack_reach() -> float:
+	return 52.0 if attack_style == "thrust" else 36.0
+
+func attack_arc() -> float:
+	return 40.0 if attack_style == "thrust" else 90.0
+
+func attack_warning_polygon() -> PackedVector2Array:
+	var windup := 0.6 if attack_style == "thrust" else 0.45
+	if attack_style == "shot" or attack_elapsed < 0.0 or attack_elapsed >= windup + 0.12:
+		return PackedVector2Array()
+	var points := PackedVector2Array([Vector2.ZERO])
+	for index in range(17):
+		var angle := attack_direction.angle() + deg_to_rad(attack_arc() * (float(index) / 16.0 - 0.5))
+		points.append(Vector2.from_angle(angle) * attack_reach())
+	points.append(Vector2.ZERO)
+	return points
 
 func _update_cone() -> void:
 	cone_points = PackedVector2Array([Vector2.ZERO])
@@ -213,7 +230,12 @@ func _draw() -> void:
 		draw_rect(Rect2(-10, -31, 20 * suspicion, 2), Color("ffb065"))
 	if attack_elapsed >= 0.0:
 		var windup := 0.65 if attack_style == "shot" else (0.6 if attack_style == "thrust" else 0.45)
-		var color := Color("ff654f") if attack_elapsed >= windup else Color("f2b95b")
-		var length := 145.0 if attack_style == "shot" else (52.0 if attack_style == "thrust" else 36.0)
-		draw_line(attack_direction * 12.0, attack_direction * length, Color(color.r, color.g, color.b, 0.75), 1.5)
-		draw_arc(Vector2.ZERO, 11.0, 0, TAU * minf(1.0, attack_elapsed / windup), 20, color, 1.0)
+		if attack_elapsed < windup + 0.12:
+			var color := Color("ff654f") if attack_elapsed >= windup else Color("f2b95b")
+			if attack_style == "shot":
+				draw_line(attack_direction * 12.0, attack_direction * 145.0, color, 1.5)
+			else:
+				var warning := attack_warning_polygon()
+				draw_colored_polygon(warning, Color(color.r, color.g, color.b, 0.28 if attack_elapsed >= windup else 0.12))
+				draw_polyline(warning, color, 1.0)
+			draw_arc(Vector2.ZERO, 11.0, 0, TAU * minf(1.0, attack_elapsed / windup), 20, color, 1.0)

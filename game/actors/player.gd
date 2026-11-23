@@ -150,7 +150,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		handle_primary(Input.is_physical_key_pressed(KEY_SHIFT), get_global_mouse_position())
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.physical_keycode == KEY_SPACE:
-			request_attack()
+			if not Input.is_physical_key_pressed(KEY_SHIFT):
+				request_attack()
 		elif event.physical_keycode == KEY_E:
 			if is_hidden():
 				emerge()

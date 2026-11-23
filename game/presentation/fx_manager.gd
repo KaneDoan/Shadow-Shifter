@@ -57,7 +57,7 @@ func impact(at: Vector2, direction: Vector2, _target: Node = null) -> void:
 
 func request_hitstop(seconds: float) -> void:
 	var now := Time.get_ticks_msec()
-	if hitstop_until_ms <= now:
+	if hitstop_until_ms == 0:
 		saved_scale = Engine.time_scale
 		Engine.time_scale = saved_scale * 0.08
 	hitstop_until_ms = maxi(hitstop_until_ms, now + int(seconds * 1000))

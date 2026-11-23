@@ -36,7 +36,7 @@ From this folder, using the installed engine:
 & D:/Godot/Godot_v4.7-stable_win64_console.exe --headless --path game --export-release Web
 ```
 
-The 120 checks exercise geometry, real physics, riding/emergence, combat, alarm, complete ghost/key routes, reset, pause, hit-stop, keyboard/mouse delivery and guard navigation. Test saves are isolated from player progress.
+The 127 checks exercise geometry, real physics, riding/emergence, combat, alarm, complete ghost/key routes, reset, pause, hit-stop, keyboard/mouse delivery and guard navigation. Test saves are isolated from player progress.
 
 Windows release was launch-tested and rendered on the local NVIDIA GPU. Web release was tested in headless Chrome with actual canvas mouse/keyboard events. Captures are in `captures/`. The unavailable native desktop-control pipe prevented automated testing of OS window focus; engine input and browser input were tested instead. Mobile/touch and gamepads are outside this prototype's scope.
 

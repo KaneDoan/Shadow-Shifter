@@ -1,6 +1,6 @@
 # ShadowShift Hybrid Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Deliver a playable top-down Godot manor mission with shadow riding, one-hit sword combat, readable stealth, fast resets and tested exports.
 
@@ -59,11 +59,11 @@
 
 **Interfaces:** Produces Rules methods above, a runnable project and extracted 32 px directional character sheets for later actors. Tests instantiate scripts dynamically so a missing production module reports a controlled failure.
 
-- [ ] Write rules tests before implementation: shift succeeds at 96 px, fails beyond 96 px, fails inactive/occluded; vision cone includes forward and rejects behind/out-of-range; emergence returns center plus eight unique 24 px samples.
-- [ ] Run `Godot --headless --path game --script tests/test_runner.gd -- --suite=rules`; expect explicit FAIL for missing Rules.
-- [ ] Implement Rules and minimal project configuration; extract only selected licensed pixel sheets and record sources. Verify sizes/frame counts.
-- [ ] Run the rules suite; expect all assertions PASS and exit 0. Run editor import/parser check.
-- [ ] Commit task and ledger its verification.
+- [x] Write rules tests before implementation: shift succeeds at 96 px, fails beyond 96 px, fails inactive/occluded; vision cone includes forward and rejects behind/out-of-range; emergence returns center plus eight unique 24 px samples.
+- [x] Run `Godot --headless --path game --script tests/test_runner.gd -- --suite=rules`; expect explicit FAIL for missing Rules.
+- [x] Implement Rules and minimal project configuration; extract only selected licensed pixel sheets and record sources. Verify sizes/frame counts.
+- [x] Run the rules suite; expect all assertions PASS and exit 0. Run editor import/parser check.
+- [x] Commit task and ledger its verification.
 
 ## Task 2: Movement, anchors, riding, emergence and doors
 
@@ -71,12 +71,12 @@
 
 **Interfaces:** Consumes Rules. Produces Player/ShadowSystem/Door methods above and physics layer conventions: walls 1, player 2, NPCs 4, anchors 8, interactables 16. Later mission/combat code uses these actor APIs and groups.
 
-- [ ] Add failing physics tests: a wall/closed door blocks a shift, open door allows it; moving an owner carries a rider; hidden player is non-targetable; blocked emergence remains hidden; alternate safe emergence succeeds; occupied doorway prevents closing; Shift+click clears/does not queue attack.
-- [ ] Run shadow suite; expect assertions fail on missing behavior.
-- [ ] Implement acceleration/movement, state transitions, priority inputs, authored/owned anchors, range highlight, 0.15 s shift visual, safe emerge query and one-second forced-eject warning.
-- [ ] Implement timed guard opening/key interaction and safe doorway closing. Add a small playable test room using the actual scripts.
-- [ ] Run rules + shadow suites and the test room; expect all checks PASS and no parser/runtime errors.
-- [ ] Commit task and ledger verification.
+- [x] Add failing physics tests: a wall/closed door blocks a shift, open door allows it; moving an owner carries a rider; hidden player is non-targetable; blocked emergence remains hidden; alternate safe emergence succeeds; occupied doorway prevents closing; Shift+click clears/does not queue attack.
+- [x] Run shadow suite; expect assertions fail on missing behavior.
+- [x] Implement acceleration/movement, state transitions, priority inputs, authored/owned anchors, range highlight, 0.15 s shift visual, safe emerge query and one-second forced-eject warning.
+- [x] Implement timed guard opening/key interaction and safe doorway closing. Add a small playable test room using the actual scripts.
+- [x] Run rules + shadow suites and the test room; expect all checks PASS and no parser/runtime errors.
+- [x] Commit task and ledger verification.
 
 ## Task 3: One-hit sword combat and enemy attacks
 
@@ -84,12 +84,12 @@
 
 **Interfaces:** Consumes actor/shadow methods. Produces guard death/body signal, exposed-player death signal, `resolve_swing(...)`, active-attack geometry and projectile collision used by mission/presentation.
 
-- [ ] Add failing tests: sword inside active arc kills once, outside arc/reach or behind a wall does not; repeated active frames cannot hit a target twice; one enemy hit kills the player; hidden player ignores damage; projectile hits wall before player; killing a ridden guard removes its anchor and safely exposes the rider.
-- [ ] Run combat suite; expect FAIL for missing behavior.
-- [ ] Implement buffered sword (0.04/0.10/0.18 s), reduced movement during attack, single-hit registry and wall occlusion. Preserve Shift input priority.
-- [ ] Implement deterministic patrols, 75°/160 px suspicion, 0.3 s detection, visible blade/thrust/shot wind-up, active attacks and last-seen investigation. Ordinary body contact causes no damage.
-- [ ] Run combat plus prior suites; expect PASS, including alive/dead signals firing once.
-- [ ] Commit task and ledger verification.
+- [x] Add failing tests: sword inside active arc kills once, outside arc/reach or behind a wall does not; repeated active frames cannot hit a target twice; one enemy hit kills the player; hidden player ignores damage; projectile hits wall before player; killing a ridden guard removes its anchor and safely exposes the rider.
+- [x] Run combat suite; expect FAIL for missing behavior.
+- [x] Implement buffered sword (0.04/0.10/0.18 s), reduced movement during attack, single-hit registry and wall occlusion. Preserve Shift input priority.
+- [x] Implement deterministic patrols, 75°/160 px suspicion, 0.3 s detection, visible blade/thrust/shot wind-up, active attacks and last-seen investigation. Ordinary body contact causes no damage.
+- [x] Run combat plus prior suites; expect PASS, including alive/dead signals firing once.
+- [x] Commit task and ledger verification.
 
 ## Task 4: Manor, alarm, boss and complete routes
 
@@ -97,12 +97,12 @@
 
 **Interfaces:** Consumes actor/shadow/combat APIs. Produces `Mission` with named courtyard/gallery/alcove/study anchors, patrol guards/sentries, lamp switch, gate-key route, escape path and result stats.
 
-- [ ] Add failing alarm tests: unseen body does nothing; first discovery starts 90 s; duplicate discovery has no effect; second unique body caps at 45 s without extending a shorter timer; boss progress is monotonic and reaches 1 at zero remaining. Reset clears all fields.
-- [ ] Add failing scenario tests for a ghost completion and a lethal gatekeeper-key completion using actual shift/interact/kill entry points; assert no mandatory path is lost when any named guard dies.
-- [ ] Implement alarm model, body discovery, one-way switch activation, deterministic escape sampling, key fallback, safe intro anchors, four authored areas, three optional sentries and success ranks.
-- [ ] Implement complete scene reset and persisted best times, with test save paths isolated from actual player progress.
-- [ ] Run mission and all prior suites; expect both routes finish, all reset assertions PASS, no runtime errors.
-- [ ] Commit task and ledger verification.
+- [x] Add failing alarm tests: unseen body does nothing; first discovery starts 90 s; duplicate discovery has no effect; second unique body caps at 45 s without extending a shorter timer; boss progress is monotonic and reaches 1 at zero remaining. Reset clears all fields.
+- [x] Add failing scenario tests for a ghost completion and a lethal gatekeeper-key completion using actual shift/interact/kill entry points; assert no mandatory path is lost when any named guard dies.
+- [x] Implement alarm model, body discovery, one-way switch activation, deterministic escape sampling, key fallback, safe intro anchors, four authored areas, three optional sentries and success ranks.
+- [x] Implement complete scene reset and persisted best times, with test save paths isolated from actual player progress.
+- [x] Run mission and all prior suites; expect both routes finish, all reset assertions PASS, no runtime errors.
+- [x] Commit task and ledger verification.
 
 ## Task 5: Presentation, audio, UI and playtest polish
 
@@ -110,12 +110,12 @@
 
 **Interfaces:** Consumes mission state/signals. Produces title/help/pause/results, readable status and objective HUD, directional actors, slashes/shift/death atlases, sound and responsive hit-stop.
 
-- [ ] Add failing integration tests for pause freezing projectiles/AI/alarm, restart during an attack/alarm restoring mission state, and hit-stop completing without freezing UI/restart.
-- [ ] Run presentation suite; expect missing/failing pause/reset behavior.
-- [ ] Export existing PixelFX candidates, inspect the contact sheets, select cohesive effects and preserve their timing/pivots. Use local assets or generate missing art only as necessary. Generate original short audio cues/ambient bed if suitable licensed audio is unavailable.
-- [ ] Implement readable ray-clipped cones, inactive/reachable anchor states, sword/attack warnings, contextual controls, title/help, pause, failure cause and ranked results. Add restrained shake/hit-stop with pause-safe timing.
-- [ ] Run all suites. Capture and inspect actual gameplay/menu/results screenshots, and manually exercise movement, shift, riding, slash, interaction, restart and pause. Correct visual/readability defects.
-- [ ] Commit task and ledger verification.
+- [x] Add failing integration tests for pause freezing projectiles/AI/alarm, restart during an attack/alarm restoring mission state, and hit-stop completing without freezing UI/restart.
+- [x] Run presentation suite; expect missing/failing pause/reset behavior.
+- [x] Export existing PixelFX candidates, inspect the contact sheets, select cohesive effects and preserve their timing/pivots. Use local assets or generate missing art only as necessary. Generate original short audio cues/ambient bed if suitable licensed audio is unavailable.
+- [x] Implement readable ray-clipped cones, inactive/reachable anchor states, sword/attack warnings, contextual controls, title/help, pause, failure cause and ranked results. Add restrained shake/hit-stop with pause-safe timing.
+- [x] Run all suites. Capture and inspect actual gameplay/menu/results screenshots, and manually exercise movement, shift, riding, slash, interaction, restart and pause. Correct visual/readability defects.
+- [x] Commit task and ledger verification.
 
 ## Task 6: Exports, full review and delivery
 
@@ -123,11 +123,11 @@
 
 **Interfaces:** Consumes the finished project. Produces playable Windows build, optional verified single-threaded web build, source entry points, credits, test evidence and known limitations.
 
-- [ ] Run full import/parser and all behavior/scenario tests; require exit 0 and no script errors.
-- [ ] Export Windows with installed 4.7 templates; launch-test the executable. Export web single-threaded, serve locally and browser-test when supported. Report platform-specific blockers accurately.
-- [ ] Dispatch one fresh whole-project reviewer against this plan, approved spec, source, tests and ledger. Fix important defects with reproducing RED→GREEN tests, then run the full suite once.
-- [ ] Verify final project/build paths, screenshots, licenses and original GDD hash. Complete README with exact controls, launch instructions, verified platforms and limitations.
-- [ ] Commit the completed source and record test/export results. Leave the project available in the approved location; no remote publication or upload is part of this task.
+- [x] Run full import/parser and all behavior/scenario tests; require exit 0 and no script errors.
+- [x] Export Windows with installed 4.7 templates; launch-test the executable. Export web single-threaded, serve locally and browser-test when supported. Report platform-specific blockers accurately.
+- [x] Dispatch one fresh whole-project reviewer against this plan, approved spec, source, tests and ledger. Fix important defects with reproducing RED→GREEN tests, then run the full suite once.
+- [x] Verify final project/build paths, screenshots, licenses and original GDD hash. Complete README with exact controls, launch instructions, verified platforms and limitations.
+- [x] Commit the completed source and record test/export results. Leave the project available in the approved location; no remote publication or upload is part of this task.
 
 ## Self-review
 
