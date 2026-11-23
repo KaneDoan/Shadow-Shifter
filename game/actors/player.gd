@@ -8,6 +8,7 @@ signal attack_started
 enum State { PHYSICAL, SHADOW, RIDING, DEAD }
 var state := State.PHYSICAL
 var input_enabled := true
+var movement_override := Vector2.ZERO
 var shadow_system
 var mission
 var combat_system
@@ -159,7 +160,10 @@ func _unhandled_input(event: InputEvent) -> void:
 					if door.try_interact(self):
 						break
 		elif event.physical_keycode == KEY_R:
-			get_tree().reload_current_scene()
+			if is_instance_valid(mission):
+				mission.request_restart()
+			else:
+				get_tree().reload_current_scene()
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
@@ -179,7 +183,7 @@ func _physics_process(delta: float) -> void:
 					eject_timer = 0.2
 		return
 	_tick_attack(delta)
-	var movement := Vector2.ZERO
+	var movement := movement_override
 	if input_enabled:
 		movement.x = float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT))
 		movement.y = float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP))

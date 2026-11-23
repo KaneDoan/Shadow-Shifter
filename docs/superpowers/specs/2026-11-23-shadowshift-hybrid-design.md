@@ -1,6 +1,6 @@
 # ShadowShift — top-down stealth and one-hit sword combat
 
-Status: proposed implementation design; awaiting approval.
+Status: approved by the user on 23 Nov 2026; implementation in progress.
 
 ## Intent and source
 

@@ -143,7 +143,7 @@ func _tick_patrol(delta: float) -> void:
 		return
 	var target := patrol_points[patrol_index]
 	var offset := target - global_position
-	if offset.length() < 2.0:
+	if offset.length() <= maxf(2.0, patrol_speed * delta):
 		global_position = target
 		wait_timer = patrol_waits[patrol_index] if patrol_index < patrol_waits.size() else 0.4
 		if patrol_index < patrol_faces.size() and patrol_faces[patrol_index] != Vector2.ZERO:

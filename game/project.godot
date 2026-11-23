@@ -7,6 +7,9 @@ run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/description="Ride the dark. Strike once. Leave no witness."
 
+[autoload]
+RunStats="*res://core/run_stats.gd"
+
 [display]
 window/size/viewport_width=640
 window/size/viewport_height=360

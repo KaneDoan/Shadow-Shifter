@@ -23,6 +23,9 @@ func _run() -> void:
 		await _test_shadow()
 	if suite in ["combat", "all"]:
 		await _test_combat()
+	if suite in ["mission", "all"]:
+		_test_alarm()
+		await _test_mission()
 	print("TEST RESULT: ", assertions - failures, "/", assertions, " passed; failures=", failures)
 	quit(0 if failures == 0 else 1)
 
@@ -291,3 +294,172 @@ func _test_combat() -> void:
 	check(not shot_target.is_alive(), "unobstructed swept projectile kills exposed player")
 	shot_stage.queue_free()
 	await settle()
+
+func _test_alarm() -> void:
+	if not FileAccess.file_exists("res://core/alarm_state.gd"):
+		check(false, "Alarm model exists")
+		return
+	var alarm = load("res://core/alarm_state.gd").new()
+	alarm.tick(30.0)
+	check(not alarm.active and alarm.remaining == 0.0, "undiscovered body has no timer")
+	check(alarm.discover_body(1), "first body discovery is unique")
+	check(alarm.active and alarm.remaining == 90.0, "first body starts 90-second escape")
+	alarm.tick(20.0)
+	var prior_progress: float = alarm.progress
+	check(not alarm.discover_body(1), "duplicate body discovery ignored")
+	check(alarm.remaining == 70.0 and alarm.bodies_found == 1, "duplicate cannot cap or extend timer")
+	alarm.discover_body(2)
+	check(alarm.remaining == 45.0, "second body caps remaining at 45 seconds")
+	check(alarm.progress == prior_progress, "timer cap does not move Veyr backward")
+	alarm.tick(40.0)
+	alarm.discover_body(3)
+	check(alarm.remaining == 5.0, "later discovery cannot extend short timer")
+	alarm.tick(10.0)
+	check(alarm.remaining == 0.0 and is_equal_approx(alarm.progress, 1.0), "escape reaches exit at timer zero")
+	alarm.reset()
+	check(not alarm.active and alarm.remaining == 0.0 and alarm.bodies_found == 0 and alarm.progress == 0.0, "alarm reset clears all state")
+
+func wait_for(condition: Callable, seconds: float = 40.0) -> bool:
+	var budget := ceili(seconds * float(Engine.physics_ticks_per_second) / Engine.time_scale) + 4
+	for frame in range(budget):
+		if condition.call():
+			return true
+		await physics_frame
+	return condition.call()
+
+func _test_mission() -> void:
+	if not FileAccess.file_exists("res://systems/mission.gd"):
+		check(false, "Complete manor mission exists")
+		return
+	var packed = load("res://main.tscn")
+	var mission = packed.instantiate()
+	mission.test_mode = true
+	root.add_child(mission)
+	current_scene = mission
+	await settle()
+	Engine.time_scale = 8.0
+	check(mission.enemies.size() == 7, "six guards plus Lord Veyr exist")
+	check(mission.player.is_hidden(), "mission starts safely hidden at well")
+	check(not mission.anchors["curtain"].active and not mission.enemies["veyr"].shadow_anchor.active, "study shadows start inactive")
+	var ghost_ok: bool = await complete_ghost_route(mission)
+	check(ghost_ok and mission.phase == "won", "actual shadow-riding ghost route completes")
+	check(mission.guards_killed == 0 and not mission.alarm.active, "ghost completion has no guard kills or alarm")
+	check(mission.rank == "Ghost Assassin", "ghost result rank correct")
+	var prior_restarts: int = mission.stats.restarts
+	mission.request_restart()
+	await settle()
+	await settle()
+	mission = current_scene
+	check(is_instance_valid(mission) and mission.phase == "playing", "restart reloads actual mission scene")
+	check(mission.stats.restarts == prior_restarts + 1, "restart counter survives reload")
+	check(not mission.lights_off and not mission.alarm.active and mission.guards_killed == 0, "restart resets switch, alarm and kills")
+	check(mission.player.is_hidden() and not mission.player.has_gate_key, "restart restores hidden spawn and clears key")
+	check(not mission.doors["gate"].is_open and mission.doors["gate"].locked, "restart restores locked gate")
+	var all_alive := true
+	for enemy in mission.enemies.values():
+		all_alive = all_alive and enemy.is_alive()
+	check(all_alive, "restart restores all actors")
+	var lethal_ok: bool = await complete_lethal_gate_route(mission)
+	check(lethal_ok and mission.phase == "won", "lethal key route completes after killing gatekeeper")
+	check(mission.guards_killed >= 1, "lethal route records guard death")
+	mission.request_restart()
+	await settle()
+	await settle()
+	mission = current_scene
+	mission.enemies["watchman"].take_hit(mission.player)
+	mission.enemies["bodyguard"].take_hit(mission.player)
+	check(not mission.enemies["watchman"].shadow_anchor.active and not mission.enemies["bodyguard"].shadow_anchor.active, "dead route carriers lose moving anchors")
+	check(mission.level.has_walk_route(Vector2(96, 736), Vector2(592, 96)), "walkable fallback to lamp survives guard deaths")
+	check(mission.level.has_walk_route(Vector2(592, 96), Vector2(1008, 304)), "walkable fallback to target survives guard deaths")
+	check(not mission.doors["study"].locked, "study fallback remains physically openable")
+	Engine.time_scale = 1.0
+	mission.queue_free()
+	current_scene = null
+	await settle()
+
+func shift_when_reachable(mission: Node, anchor: Node, seconds: float = 40.0) -> bool:
+	var available: bool = await wait_for(func(): return mission.player.is_alive() and mission.shadow_system.can_shift(mission.player, anchor), seconds)
+	if not available:
+		printerr("SCENARIO: no route to ", anchor.anchor_id)
+		return false
+	return mission.player.request_shift(anchor)
+
+func finish_from_statue(mission: Node) -> bool:
+	var player = mission.player
+	if not await shift_when_reachable(mission, mission.enemies["watchman"].shadow_anchor):
+		return false
+	if not await shift_when_reachable(mission, mission.anchors["cupboard"]):
+		return false
+	if not player.emerge() or not mission.try_interact(player):
+		printerr("SCENARIO: lamp interaction failed")
+		return false
+	check(mission.lights_off and mission.anchors["curtain"].active and mission.enemies["veyr"].shadow_anchor.active, "lamp activates curtain and Veyr anchors")
+	if not player.request_shift(mission.anchors["cupboard"]):
+		return false
+	if not await shift_when_reachable(mission, mission.enemies["watchman"].shadow_anchor):
+		return false
+	if not await shift_when_reachable(mission, mission.anchors["statue"]):
+		return false
+	if not player.request_shift(mission.anchors["bench"]):
+		return false
+	if not await shift_when_reachable(mission, mission.enemies["bodyguard"].shadow_anchor):
+		return false
+	if not await shift_when_reachable(mission, mission.anchors["curtain"]):
+		return false
+	if not await shift_when_reachable(mission, mission.enemies["veyr"].shadow_anchor):
+		return false
+	return player.request_attack()
+
+func complete_ghost_route(mission: Node) -> bool:
+	if not mission.player.request_shift(mission.anchors["crate"]):
+		return false
+	if not await shift_when_reachable(mission, mission.enemies["gatekeeper"].shadow_anchor):
+		return false
+	if not await shift_when_reachable(mission, mission.anchors["statue"]):
+		return false
+	return await finish_from_statue(mission)
+
+func walk_to(player: Node, destination: Vector2, seconds: float = 10.0) -> bool:
+	# At 8x, a keyboard-driven step can skip a five-pixel arrival region.
+	# Walk at 2x while retaining real player acceleration and collisions.
+	var previous_scale := Engine.time_scale
+	Engine.time_scale = 2.0
+	var budget := ceili(seconds * 60.0 / Engine.time_scale) + 4
+	for frame in range(budget):
+		if not player.is_alive():
+			printerr("SCENARIO: walking player died at ", player.global_position, " reason=", player.mission.failure_reason)
+			player.movement_override = Vector2.ZERO
+			Engine.time_scale = previous_scale
+			return false
+		if player.global_position.distance_to(destination) < 5.0:
+			player.movement_override = Vector2.ZERO
+			Engine.time_scale = previous_scale
+			return true
+		player.movement_override = (destination - player.global_position).normalized()
+		await physics_frame
+	printerr("SCENARIO: walk timeout position=", player.global_position, " target=", destination, " velocity=", player.velocity)
+	player.movement_override = Vector2.ZERO
+	Engine.time_scale = previous_scale
+	return false
+
+func complete_lethal_gate_route(mission: Node) -> bool:
+	var player = mission.player
+	if not player.request_shift(mission.anchors["crate"]):
+		return false
+	if not await shift_when_reachable(mission, mission.enemies["gatekeeper"].shadow_anchor):
+		return false
+	player.request_attack()
+	await settle()
+	check(not mission.enemies["gatekeeper"].is_alive() and player.has_gate_key, "dead gatekeeper drops recoverable key")
+	if not await walk_to(player, Vector2(336, 640)):
+		printerr("SCENARIO: walk to gate failed")
+		return false
+	if not mission.try_interact(player):
+		return false
+	if not await walk_to(player, Vector2(400, 640)):
+		return false
+	if not player.request_shift(mission.anchors["foyer"]):
+		return false
+	if not player.request_shift(mission.anchors["statue"]):
+		return false
+	return await finish_from_statue(mission)
