@@ -32,6 +32,8 @@ func _run() -> void:
 		await _test_input()
 	if suite in ["navigation", "all"]:
 		await _test_navigation()
+	if suite in ["dialogue", "all"]:
+		await _test_dialogue()
 	if assertions == 0:
 		check(false, "test suite executes at least one assertion")
 	print("TEST RESULT: ", assertions - failures, "/", assertions, " passed; failures=", failures)
@@ -59,6 +61,59 @@ func _test_rules() -> void:
 		check(is_equal_approx(points[index].distance_to(Vector2(100, 50)), 24.0), "emergence ring radius 24")
 		unique[points[index].round()] = true
 	check(unique.size() == 8, "emergence ring points are unique")
+
+func _test_dialogue() -> void:
+	var mission = load("res://main.tscn").instantiate()
+	mission.test_mode = true
+	root.add_child(mission)
+	current_scene = mission
+	await settle()
+	var bar = mission.ui.dialogue
+	check(bar.intro.size() >= 1, "dialogue data provides intro cards")
+	var speakers_ok := true
+	for id in bar.lines:
+		for line in bar.lines[id]:
+			speakers_ok = speakers_ok and bar.speakers.has(String(line[0]))
+	check(speakers_ok, "every dialogue speaker has a colour")
+	bar.played.clear()
+	bar.queue.clear()
+	bar.current = []
+	check(bar.play("gallery"), "conversation starts")
+	check(not bar.play("gallery"), "conversation plays once per run")
+	check(bar.is_speaking() and bar.queue.size() == bar.lines["gallery"].size() - 1, "lines queue in order")
+	bar._process(30.0)
+	check(int(bar.shown) == String(bar.current[1]).length(), "line types out fully")
+	var first: Array = bar.current
+	bar._process(30.0)
+	check(bar.current != first, "line advances after its reading time")
+	check(bar.play("alarm", true) and String(bar.current[1]) == String(bar.lines["alarm"][0][1]), "urgent conversation interrupts")
+	# Intro cards: shown once per session, then the mission starts.
+	mission.phase = "title"
+	mission.ui.set_screen("title")
+	mission.stats.seen_intro = false
+	mission.test_mode = false
+	mission.ui._start()
+	check(mission.ui.screen_mode == "intro" and mission.phase == "title", "first start shows intro cards")
+	for index in range(bar.intro.size()):
+		mission.ui._advance_intro()
+	check(mission.phase == "playing" and mission.ui.screen_mode == "playing", "intro cards lead into the mission")
+	mission.phase = "title"
+	mission.ui.set_screen("title")
+	mission.ui._start()
+	check(mission.ui.screen_mode == "playing", "intro does not repeat in the same session")
+	mission.phase = "title"
+	mission.ui.set_screen("title")
+	mission.stats.seen_intro = false
+	mission.ui._start()
+	var escape := InputEventKey.new()
+	escape.physical_keycode = KEY_ESCAPE
+	escape.pressed = true
+	mission.ui._input(escape)
+	check(mission.phase == "playing", "Escape skips the intro")
+	mission.test_mode = true
+	mission.queue_free()
+	current_scene = null
+	await process_frame
 
 func make_wall(at: Vector2, size: Vector2) -> StaticBody2D:
 	var wall := StaticBody2D.new()
@@ -356,8 +411,8 @@ func _test_mission() -> void:
 	current_scene = mission
 	await settle()
 	Engine.time_scale = 8.0
-	check(mission.enemies.size() == 7, "six guards plus Lord Veyr exist")
-	check(mission.player.is_hidden(), "mission starts safely hidden at well")
+	check(mission.enemies.size() == 11, "ten guards plus Lord Veyr exist")
+	check(mission.player.is_hidden() and mission.player.current_anchor == mission.anchors["cart"], "mission starts safely hidden in the kitchen garden")
 	check(not mission.anchors["curtain"].active and not mission.enemies["veyr"].shadow_anchor.active, "study shadows start inactive")
 	var ghost_ok: bool = await complete_ghost_route(mission)
 	check(ghost_ok and mission.phase == "won", "actual shadow-riding ghost route completes")
@@ -387,6 +442,9 @@ func _test_mission() -> void:
 	mission.enemies["watchman"].take_hit(mission.player)
 	mission.enemies["bodyguard"].take_hit(mission.player)
 	check(not mission.enemies["watchman"].shadow_anchor.active and not mission.enemies["bodyguard"].shadow_anchor.active, "dead route carriers lose moving anchors")
+	mission.enemies["groundskeeper"].take_hit(mission.player)
+	mission.enemies["steward"].take_hit(mission.player)
+	check(mission.level.has_walk_route(Vector2(1104, 880), Vector2(96, 736)), "walkable fallback from garden to courtyard survives guard deaths")
 	check(mission.level.has_walk_route(Vector2(96, 736), Vector2(592, 96)), "walkable fallback to lamp survives guard deaths")
 	check(mission.level.has_walk_route(Vector2(592, 96), Vector2(1008, 304)), "walkable fallback to target survives guard deaths")
 	check(not mission.doors["study"].locked, "study fallback remains physically openable")
@@ -428,7 +486,34 @@ func finish_from_statue(mission: Node) -> bool:
 		return false
 	return player.request_attack()
 
+func cross_servants_wing(mission: Node) -> bool:
+	# Opening act: garden -> servants' hall -> courtyard, riding only shadows.
+	var player = mission.player
+	if not player.request_shift(mission.anchors["hedge"]):
+		return false
+	if not await shift_when_reachable(mission, mission.enemies["groundskeeper"].shadow_anchor):
+		return false
+	if not await shift_when_reachable(mission, mission.anchors["woodpile"]):
+		return false
+	if not player.request_shift(mission.anchors["larder"]):
+		return false
+	await settle()
+	check(mission.entered_hall and mission.objective().contains("courtyard"), "entering the servants' hall advances the objective")
+	if not await shift_when_reachable(mission, mission.enemies["steward"].shadow_anchor):
+		return false
+	if not await shift_when_reachable(mission, mission.anchors["table"]):
+		return false
+	if not player.request_shift(mission.anchors["stairs"]):
+		return false
+	if not player.request_shift(mission.anchors["ivy"]):
+		return false
+	await settle()
+	check(mission.reached_courtyard and not mission.alarm.active, "servants' wing crossed unseen")
+	return true
+
 func complete_ghost_route(mission: Node) -> bool:
+	if not await cross_servants_wing(mission):
+		return false
 	if not mission.player.request_shift(mission.anchors["crate"]):
 		return false
 	if not await shift_when_reachable(mission, mission.enemies["gatekeeper"].shadow_anchor):
@@ -462,6 +547,8 @@ func walk_to(player: Node, destination: Vector2, seconds: float = 10.0) -> bool:
 
 func complete_lethal_gate_route(mission: Node) -> bool:
 	var player = mission.player
+	if not await cross_servants_wing(mission):
+		return false
 	if not player.request_shift(mission.anchors["crate"]):
 		return false
 	if not await shift_when_reachable(mission, mission.enemies["gatekeeper"].shadow_anchor):
@@ -575,6 +662,9 @@ func _test_input() -> void:
 	emit_mouse(Vector2(150, 239), false)
 	await process_frame
 	check(mission.phase == "playing", "title button receives mouse press and release")
+	mission.player.attach_anchor(mission.anchors["well"])
+	mission.camera.reset_smoothing()
+	await settle()
 	mission.phase = "title"
 	mission.ui.set_screen("title")
 	mission.ui.buttons[1]["button"].grab_focus()

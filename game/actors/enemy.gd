@@ -45,7 +45,8 @@ func _ready() -> void:
 	add_child(collider)
 	visual = preload("res://actors/actor_visual.gd").new()
 	visual.role = visual_role
-	visual.tint = Color(0.96, 0.77, 1.0) if is_boss else (Color(1.0, 0.9, 0.72) if attack_style == "shot" else Color(1.0, 0.67, 0.65))
+	# Each role now has its own sprite set, so enemies keep their original colours.
+	visual.tint = Color.WHITE
 	visual.accent = Color("e8bb70") if not is_boss else Color("f7b3d8")
 	add_child(visual)
 	shadow_anchor = preload("res://world/shadow_anchor.gd").new()

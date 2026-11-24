@@ -2,6 +2,7 @@ extends Node
 
 var restarts := 0
 var has_started := false
+var seen_intro := false
 var best_times: Dictionary = {}
 var save_path := "user://shadowshift_progress.cfg"
 

@@ -11,6 +11,8 @@ var failure_reason := ""
 var elapsed := 0.0
 var guards_killed := 0
 var lights_off := false
+var entered_hall := false
+var reached_courtyard := false
 var visited_gallery := false
 var key_available := false
 var key_position := Vector2.ZERO
@@ -67,7 +69,7 @@ func _ready() -> void:
 		world.add_child(door)
 		doors[data["id"]] = door
 	player = preload("res://actors/player.gd").new()
-	player.position = anchors["well"].position
+	player.position = anchors[Data.START_ANCHOR].position
 	player.shadow_system = shadow_system
 	player.combat_system = combat_system
 	player.mission = self
@@ -93,7 +95,7 @@ func _ready() -> void:
 		enemy.died.connect(_on_enemy_died)
 		enemies[data["id"]] = enemy
 	enemies["veyr"].shadow_anchor.set_active(false)
-	player.attach_anchor(anchors["well"])
+	player.attach_anchor(anchors[Data.START_ANCHOR])
 	camera = Camera2D.new()
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 7.0
@@ -166,8 +168,14 @@ func _physics_process(delta: float) -> void:
 	if phase != "playing":
 		return
 	elapsed += delta
-	if player.global_position.x >= 384:
-		visited_gallery = true
+	var at: Vector2 = player.global_position
+	if at.y >= 832 and at.x < 608:
+		entered_hall = true
+	if at.y < 768:
+		entered_hall = true
+		reached_courtyard = true
+		if at.x >= 384:
+			visited_gallery = true
 	if key_available and not player.is_hidden() and player.global_position.distance_to(key_position) <= 20.0:
 		player.has_gate_key = true
 		key_available = false
@@ -304,6 +312,10 @@ func objective() -> String:
 		return "Target eliminated. The dark remembers."
 	if alarm.active:
 		return "Intercept Lord Veyr before he escapes"
+	if not entered_hall:
+		return "Slip through the kitchen garden into the servants' hall"
+	if not reached_courtyard:
+		return "Cross the servants' hall to the courtyard"
 	if not visited_gallery:
 		return "Ride the gatekeeper through the gate"
 	if not lights_off:
@@ -321,6 +333,9 @@ func context_prompt() -> String:
 		if player.global_position.distance_to(door.global_position) <= 48.0:
 			return "E  Open " + ("gate" if door.door_id == "gate" else "study door")
 	return "WASD  Move   /   LMB or SPACE  Strike   /   SHIFT + CLICK  Hide"
+
+func guard_total() -> int:
+	return enemies.size() - 1
 
 func _draw() -> void:
 	if key_available:

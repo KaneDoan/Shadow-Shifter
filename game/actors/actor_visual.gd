@@ -19,9 +19,8 @@ func _ready() -> void:
 			var key: String = direction + "_" + animation
 			sheets[key] = load("res://assets/characters/%s/%s.png" % [role, key])
 	sprite = Sprite2D.new()
-	sprite.hframes = 4
-	sprite.position = Vector2(0, -20)
-	sprite.scale = Vector2(2, 2)
+	# 64 px frames drawn 1:1 with the 16 px manor tiles; feet sit 13 px below frame centre.
+	sprite.position = Vector2(0, -10)
 	sprite.modulate = tint
 	add_child(sprite)
 
@@ -35,12 +34,22 @@ func _process(delta: float) -> void:
 		animation_key = key
 		clock = 0.0
 	clock += delta
-	sprite.texture = sheets[key]
+	var texture: Texture2D = sheets[key]
+	if sprite.texture != texture:
+		sprite.texture = texture
+		# Sheets are horizontal strips of square frames with 2, 4, 6 or 8 frames.
+		sprite.hframes = maxi(1, texture.get_width() / texture.get_height())
+		sprite.frame = 0
 	sprite.flip_h = direction == "S" and facing.x < 0.0
-	var fps := 10.0 if moving else 5.0
+	var count := sprite.hframes
+	# Fixed loop durations keep timing stable whatever the frame count of a sheet.
+	var fps := 10.0 if moving else float(count) / 1.4
 	if attacking:
-		fps = 12.5
-	sprite.frame = mini(3, int(clock * 7.0)) if dead else int(clock * fps) % 4
+		fps = float(count) / 0.32
+	if dead:
+		sprite.frame = mini(count - 1, int(clock * float(count) / 0.6))
+	else:
+		sprite.frame = int(clock * fps) % count
 	queue_redraw()
 
 func _draw() -> void:

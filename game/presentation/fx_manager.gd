@@ -19,7 +19,7 @@ func _ready() -> void:
 		clips[name] = metadata
 	occupied_flame = spawn("shadow", Vector2.ZERO, 0.27, 1.0, true)
 	occupied_flame.modulate.a = 0.8
-	for point in [Vector2(64, 480), Vector2(320, 544), Vector2(416, 320), Vector2(736, 320), Vector2(736, 736), Vector2(416, 736), Vector2(416, 64), Vector2(608, 64), Vector2(832, 192), Vector2(1056, 192), Vector2(1056, 512)]:
+	for point in [Vector2(64, 480), Vector2(320, 544), Vector2(416, 320), Vector2(736, 320), Vector2(736, 736), Vector2(416, 736), Vector2(416, 64), Vector2(608, 64), Vector2(832, 192), Vector2(1056, 192), Vector2(1056, 512), Vector2(64, 864), Vector2(576, 864), Vector2(704, 864), Vector2(1120, 864)]:
 		var torch := spawn("torch", point, 0.32, 1.0, true)
 		torch.z_index = -3
 		# Loop phases differ deterministically, without affecting gameplay.

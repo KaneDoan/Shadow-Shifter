@@ -1,6 +1,6 @@
 # ShadowShift
 
-A complete, replayable top-down stealth and one-hit sword mission in Blackglass Manor. Ride guards' shadows, extinguish the study lamp, reach Lord Veyr and escape. Detection starts combat and a timed escape alarm.
+A complete, replayable top-down stealth and one-hit sword mission in Blackglass Manor. Slip in through the kitchen garden and servants' hall, ride guards' shadows, extinguish the study lamp, reach Lord Veyr and escape. Detection starts combat and a timed escape alarm.
 
 ## Play
 
@@ -26,6 +26,10 @@ Source: import `game/project.godot` in Godot 4.7, then press F6 on main.tscn or 
 
 Purple rings are shadows; dim rings are inactive. Walls and closed doors block shifts. Hidden riders are safe. Exposed characters die from one valid hit. Watch enemy wind-ups, emerge behind them and strike. The gatekeeper carries a key if you choose a lethal approach. Dead route carriers have alternate walking paths. Ranked results distinguish Ghost, Silent Blade and Messy Success; best times save locally.
 
+## Story and dialogue
+
+`game/data/dialogue.json` holds the intro cards (shown once per session after Enter the Manor; click or Space advances, Esc skips) and the in-mission subtitle lines. Each conversation is keyed by the event that triggers it (`mission_start`, `first_ride`, `hall`, `courtyard`, `gallery`, `first_kill`, `key`, `lights_off`, `study`, `alarm`), plays once per run, and never pauses play. Edit the text there; triggers live in `game/ui/game_ui.gd`.
+
 ## Verify and rebuild
 
 From this folder, using the installed engine:
@@ -36,7 +40,7 @@ From this folder, using the installed engine:
 & D:/Godot/Godot_v4.7-stable_win64_console.exe --headless --path game --export-release Web
 ```
 
-The 127 checks exercise geometry, real physics, riding/emergence, combat, alarm, complete ghost/key routes, reset, pause, hit-stop, keyboard/mouse delivery and guard navigation. Test saves are isolated from player progress.
+The 144 checks exercise geometry, real physics, riding/emergence, combat, alarm, complete ghost/key routes, reset, pause, hit-stop, keyboard/mouse delivery and guard navigation. Test saves are isolated from player progress.
 
 Windows release was launch-tested and rendered on the local NVIDIA GPU. Web release was tested in headless Chrome with actual canvas mouse/keyboard events. Captures are in `captures/`. The unavailable native desktop-control pipe prevented automated testing of OS window focus; engine input and browser input were tested instead. Mobile/touch and gamepads are outside this prototype's scope.
 

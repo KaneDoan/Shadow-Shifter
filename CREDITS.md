@@ -7,6 +7,20 @@ Selected characters and dungeon art by **CraftPix** from the user's local librar
 - `D:/Game Assets/2D Assets/CraftPixLibrary/packs/free-top-down-roguelike-game-kit-pixel-art/`
 - `D:/Game Assets/2D Assets/CraftPixLibrary/packs/free-2d-top-down-pixel-dungeon-asset-pack/`
 
+Manor art pass (characters and Blackglass Manor visuals), imported by `tools/prepare_manor_art.py`:
+
+- `nobles-manor-pixel-top-down-tileset-asset-pack` — floors, walls, props, fountain, gargoyle
+- `free-base-4-direction-male-character-pixel-art` — the assassin (tinted violet in game)
+- `free-swordsman-1-3-level-pixel-top-down-sprite-character-pack` — guards (level 3)
+- `archer-1-3-level-pixel-top-down-sprite-character` — watchmen (level 2)
+- `free-vampire-4-direction-pixel-character-sprite-pack` — Lord Veyr
+
+- `simplified-medieval-gothic-pixel-font-for-video-games` — `Simplified Gothic` display font (menus, headings, speaker names)
+
+Menu, intro-card and dialogue-bar patterns adapted from the user's own Dead Man's Switch project; its Pixolde font is not used here.
+
+The current build no longer uses any art from the two earlier packs above; doors are custom-drawn. Their files remain in `game/assets/` but are unreferenced.
+
 Original bundled license files are retained under `game/assets/licenses/`. They point to [CraftPix file licenses](https://craftpix.net/file-licenses/). `game/assets/manifest.json` records the exact archive member and SHA-256 of each extracted file. The assets are used in the game rather than redistributed as a standalone asset pack.
 
 ## Design and code assistance

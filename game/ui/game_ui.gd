@@ -11,21 +11,36 @@ var help_return := "title"
 var font: Font
 var buttons: Array[Dictionary] = []
 var clock := 0.0
+var display_font: Font
+var dialogue: Control
+var intro_index := 0
+var intro_clock := 0.0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	font = ThemeDB.fallback_font
-	button("ENTER THE MANOR", Rect2(40, 222, 220, 34), ["title"], _start, true)
-	button("HOW TO PLAY", Rect2(40, 268, 140, 27), ["title"], func(): show_help("title"))
-	button("QUIT", Rect2(192, 268, 68, 27), ["title"], func(): get_tree().quit())
-	button("RETURN TO THE DARK", Rect2(214, 161, 212, 32), ["pause"], resume_game, true)
-	button("RESTART MISSION", Rect2(214, 202, 212, 30), ["pause"], mission.request_restart)
-	button("CONTROLS & RULES", Rect2(214, 241, 212, 30), ["pause"], func(): show_help("pause"))
-	button("BACK", Rect2(40, 305, 140, 29), ["help"], func(): set_screen(help_return))
-	button("ENTER AGAIN", Rect2(80, 287, 216, 34), ["won", "lost"], mission.request_restart, true)
-	button("RETURN TO TITLE", Rect2(312, 287, 216, 34), ["won", "lost"], _return_title)
+	# Gothic pixel font for headings, buttons and speaker names; crisp at multiples of 16 px.
+	var gothic: FontFile = load("res://assets/fonts/simplified_gothic.otf")
+	gothic.antialiasing = TextServer.FONT_ANTIALIASING_NONE
+	gothic.hinting = TextServer.HINTING_NONE
+	gothic.subpixel_positioning = TextServer.SUBPIXEL_POSITIONING_DISABLED
+	display_font = gothic
+	dialogue = preload("res://ui/dialogue_bar.gd").new()
+	dialogue.display_font = display_font
+	dialogue.can_advance = func(): return screen_mode == "playing"
+	add_child(dialogue)
+	mission.feedback_event.connect(_on_feedback)
+	button("Enter the Manor", Rect2(40, 222, 220, 34), ["title"], _start, true)
+	button("How to Play", Rect2(40, 268, 140, 27), ["title"], func(): show_help("title"))
+	button("Quit", Rect2(192, 268, 68, 27), ["title"], func(): get_tree().quit())
+	button("Return to the Dark", Rect2(214, 161, 212, 32), ["pause"], resume_game, true)
+	button("Restart Mission", Rect2(214, 202, 212, 30), ["pause"], mission.request_restart)
+	button("Controls & Rules", Rect2(214, 241, 212, 30), ["pause"], func(): show_help("pause"))
+	button("Back", Rect2(40, 305, 140, 29), ["help"], func(): set_screen(help_return))
+	button("Enter Again", Rect2(80, 287, 216, 34), ["won", "lost"], mission.request_restart, true)
+	button("Return to Title", Rect2(312, 287, 216, 34), ["won", "lost"], _return_title)
 	mission.result_changed.connect(func(): set_screen(mission.phase))
 	set_screen("playing")
 
@@ -34,7 +49,8 @@ func button(caption: String, rectangle: Rect2, modes: Array, action: Callable, p
 	item.text = caption
 	item.position = rectangle.position
 	item.size = rectangle.size
-	item.add_theme_font_size_override("font_size", 12 if primary else 10)
+	item.add_theme_font_override("font", display_font)
+	item.add_theme_font_size_override("font_size", 16)
 	item.add_theme_color_override("font_color", INK)
 	item.add_theme_color_override("font_hover_color", Color.WHITE)
 	item.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -53,6 +69,7 @@ func button(caption: String, rectangle: Rect2, modes: Array, action: Callable, p
 	item.add_theme_stylebox_override("pressed", hover)
 	item.add_theme_stylebox_override("focus", focus)
 	item.pressed.connect(action)
+	item.pressed.connect(_ui_sound)
 	add_child(item)
 	buttons.append({"button": item, "modes": modes})
 
@@ -64,8 +81,48 @@ func set_screen(mode: String) -> void:
 	queue_redraw()
 
 func _start() -> void:
+	# The story cards play once per session; tests and later runs go straight in.
+	if not mission.stats.seen_intro and not mission.test_mode and not dialogue.intro.is_empty():
+		mission.stats.seen_intro = true
+		intro_index = 0
+		intro_clock = 0.0
+		set_screen("intro")
+		return
 	mission.begin_run()
 	set_screen("playing")
+
+func _advance_intro() -> void:
+	_ui_sound()
+	intro_index += 1
+	intro_clock = 0.0
+	if intro_index >= dialogue.intro.size():
+		_start()
+
+func _ui_sound() -> void:
+	if is_instance_valid(mission) and is_instance_valid(mission.audio_manager):
+		mission.audio_manager.play("switch", -22.0)
+
+func _on_feedback(kind: String, _at: Vector2, _direction: Vector2) -> void:
+	match kind:
+		"key": dialogue.play("key")
+		"switch": dialogue.play("lights_off")
+		"alarm": dialogue.play("alarm", true)
+		"kill": dialogue.play("first_kill")
+
+func _update_dialogue_triggers() -> void:
+	if screen_mode != "playing" or mission.phase != "playing":
+		return
+	dialogue.play("mission_start")
+	if mission.player.state == mission.player.State.RIDING:
+		dialogue.play("first_ride")
+	if mission.entered_hall:
+		dialogue.play("hall")
+	if mission.reached_courtyard:
+		dialogue.play("courtyard")
+	if mission.visited_gallery:
+		dialogue.play("gallery")
+	if mission.level.zone_name(mission.player.global_position) == "VEYR'S STUDY":
+		dialogue.play("study")
 
 func _return_title() -> void:
 	mission.stats.has_started = false
@@ -86,6 +143,17 @@ func show_help(return_to: String) -> void:
 	set_screen("help")
 
 func _input(event: InputEvent) -> void:
+	if screen_mode == "intro":
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			_advance_intro()
+		elif event is InputEventKey and event.pressed and not event.echo:
+			if event.physical_keycode == KEY_ESCAPE:
+				intro_index = dialogue.intro.size() - 1
+				_advance_intro()
+			elif event.physical_keycode in [KEY_SPACE, KEY_ENTER]:
+				_advance_intro()
+		get_viewport().set_input_as_handled()
+		return
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
 	var key: int = event.physical_keycode
@@ -115,7 +183,13 @@ func _input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	clock += delta / maxf(0.01, Engine.time_scale)
+	intro_clock += delta / maxf(0.01, Engine.time_scale)
+	if is_instance_valid(mission):
+		_update_dialogue_triggers()
 	queue_redraw()
+
+func display(value: String, at: Vector2, size_px: int = 16, color: Color = INK) -> void:
+	draw_string(display_font, at, value, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, color)
 
 func label(value: String, at: Vector2, size_px: int = 12, color: Color = INK) -> void:
 	draw_string(font, at, value, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, color)
@@ -133,23 +207,39 @@ func _draw() -> void:
 		_draw_hud()
 	elif screen_mode == "title":
 		_draw_title()
+	elif screen_mode == "intro":
+		_draw_intro()
 	elif screen_mode == "help":
 		_draw_help()
 	elif screen_mode == "pause":
 		draw_rect(Rect2(0, 0, 640, 360), Color(0.025, 0.03, 0.065, 0.88))
 		spaced("TIME HOLDS ITS BREATH", Vector2(214, 87), 9, CYAN)
-		label("PAUSED", Vector2(238, 132), 34)
+		display("Paused", Vector2(232, 136), 48)
 		label("The manor waits. So do its blades.", Vector2(213, 297), 11, MUTED)
 	else:
 		_draw_results()
 
+func _draw_intro() -> void:
+	draw_rect(Rect2(0, 0, 640, 360), Color(0.012, 0.012, 0.03, 1))
+	if intro_index >= dialogue.intro.size():
+		return
+	var alpha := clampf(intro_clock / 0.6, 0.0, 1.0)
+	var text: String = dialogue.intro[intro_index]
+	var block := font.get_multiline_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, 440, 13)
+	draw_multiline_string(font, Vector2(100, 180 - block.y * 0.5 + 10), text, HORIZONTAL_ALIGNMENT_CENTER, 440, 13, -1, Color(0.85, 0.82, 0.95, alpha))
+	for index in range(dialogue.intro.size()):
+		draw_circle(Vector2(304 + index * 16, 318), 2.5, VIOLET if index == intro_index else Color("3b3450"))
+	label("Click / Space to continue   -   Esc to skip", Vector2(392, 348), 9, Color(0.42, 0.42, 0.55))
+
 func _draw_title() -> void:
-	draw_rect(Rect2(0, 0, 640, 360), Color(0.025, 0.03, 0.065, 0.9))
+	# Lighter veil than before so the manor shows through behind the menu.
+	draw_rect(Rect2(0, 0, 640, 360), Color(0.025, 0.03, 0.065, 0.74))
+	draw_rect(Rect2(0, 0, 380, 360), Color(0.02, 0.022, 0.05, 0.55))
 	draw_rect(Rect2(40, 54, 3, 19), VIOLET)
 	spaced("BLACKGLASS MANOR / MIDNIGHT", Vector2(54, 67), 9, CYAN, 1.7)
-	label("SHADOW", Vector2(37, 137), 40)
-	var logo_x := 37.0 + font.get_string_size("SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1, 40).x + 2.0
-	label("SHIFT", Vector2(logo_x, 137), 40, VIOLET)
+	display("SHADOW", Vector2(37, 140), 48)
+	var logo_x := 37.0 + display_font.get_string_size("SHADOW", HORIZONTAL_ALIGNMENT_LEFT, -1, 48).x + 4.0
+	display("SHIFT", Vector2(logo_x, 140), 48, VIOLET)
 	draw_line(Vector2(40, 157), Vector2(348, 157), Color("4b3a65"), 1)
 	label("Ride living shadows. Strike once.", Vector2(40, 182), 13, Color("c4bfd7"))
 	label("Leave no witness.", Vector2(40, 201), 13, MUTED)
@@ -187,21 +277,23 @@ func _draw_hud() -> void:
 	draw_rect(Rect2(0, 334, 640, 26), Color(0.025, 0.035, 0.065, 0.95))
 	label(mission.context_prompt(), Vector2(14, 350), 10, Color("c3bdd4"))
 	if mission.shadow_system.feedback_time > 0.0:
-		draw_rect(Rect2(16, 305, 490, 21), Color(0.04, 0.035, 0.09, 0.85))
-		label(mission.shadow_system.feedback, Vector2(24, 319), 10, CYAN)
+		var feedback_y := 248.0 if dialogue.is_speaking() else 305.0
+		draw_rect(Rect2(16, feedback_y, 490, 21), Color(0.04, 0.035, 0.09, 0.85))
+		label(mission.shadow_system.feedback, Vector2(24, feedback_y + 14), 10, CYAN)
 	_draw_minimap()
-	if mission.player.current_anchor == mission.anchors["well"] and not mission.visited_gallery:
+	if mission.player.current_anchor == mission.anchors[Data.START_ANCHOR] and not mission.entered_hall:
 		draw_rect(Rect2(18, 61, 322, 66), Color(0.035, 0.04, 0.085, 0.94))
 		draw_rect(Rect2(18, 61, 2, 66), VIOLET)
 		spaced("01 / LEARN TO DISAPPEAR", Vector2(29, 79), 9, VIOLET, 1)
-		label("Hold SHIFT and click the crate's shadow.", Vector2(29, 99), 11)
-		label("Then ride the guard when his shadow comes near.", Vector2(29, 117), 10, MUTED)
+		label("Hold SHIFT and click the hedge's shadow.", Vector2(29, 99), 11)
+		label("Then ride the groundskeeper when his shadow comes near.", Vector2(29, 117), 10, MUTED)
 
 func _draw_minimap() -> void:
-	var origin := Vector2(540, 247)
-	var scale_map := Vector2(86, 59) / Data.BOUNDS
-	draw_rect(Rect2(530, 231, 104, 98), Color(0.025, 0.035, 0.065, 0.88))
-	spaced("MANOR", Vector2(541, 242), 8, MUTED, 1)
+	# Uniform scale so rooms keep their shape; the map is taller now the wing extends south.
+	var origin := Vector2(545, 225)
+	var scale_map := Vector2.ONE * (78.0 / Data.BOUNDS.y)
+	draw_rect(Rect2(530, 205, 104, 124), Color(0.025, 0.035, 0.065, 0.88))
+	spaced("MANOR", Vector2(541, 218), 8, MUTED, 1)
 	for room in Data.ROOMS:
 		var rectangle: Rect2 = room["rect"]
 		var mapped := Rect2(origin + rectangle.position * scale_map, rectangle.size * scale_map)
@@ -214,12 +306,12 @@ func _draw_minimap() -> void:
 	draw_circle(origin + mission.player.global_position * scale_map, 2.0, CYAN)
 	if mission.enemies["veyr"].is_alive():
 		draw_circle(origin + mission.enemies["veyr"].global_position * scale_map, 1.7, Color("e88694"))
-	label("%02d:%02d   %d / 6" % [floori(mission.elapsed / 60), int(mission.elapsed) % 60, mission.guards_killed], Vector2(540, 320), 9, MUTED)
+	label("%02d:%02d   %d / %d" % [floori(mission.elapsed / 60), int(mission.elapsed) % 60, mission.guards_killed, mission.guard_total()], Vector2(540, 320), 9, MUTED)
 
 func _draw_help() -> void:
 	draw_rect(Rect2(0, 0, 640, 360), Color(0.025, 0.03, 0.065, 0.97))
 	spaced("THE RULES OF THE DARK", Vector2(40, 43), 9, CYAN)
-	label("MOVE LIKE A SHADOW", Vector2(40, 77), 27)
+	display("Move Like a Shadow", Vector2(40, 80), 32)
 	var rows := [
 		["WASD / ARROWS", "Move in physical form. Aim with the mouse."],
 		["HOLD SHIFT + CLICK", "Shift to a highlighted shadow. Walls block travel."],
@@ -238,12 +330,12 @@ func _draw_results() -> void:
 	var success := screen_mode == "won"
 	draw_rect(Rect2(0, 0, 640, 360), Color(0.025, 0.03, 0.065, 0.93))
 	spaced("TARGET ELIMINATED" if success else "THE DARK LET GO", Vector2(80, 58), 10, CYAN if success else Color("ef8e89"))
-	label(mission.rank.to_upper() if success else "ONE HIT. ONE END.", Vector2(78, 108), 31, INK if success else Color("f2c3c6"))
+	display(mission.rank if success else "One Hit. One End.", Vector2(78, 110), 32, INK if success else Color("f2c3c6"))
 	label("No shadow could hold him." if success else mission.failure_reason, Vector2(80, 135), 12, MUTED)
 	draw_line(Vector2(80, 155), Vector2(528, 155), Color("483855"), 1)
 	var metrics := [
 		["MISSION TIME", "%02d:%05.2f" % [floori(mission.elapsed / 60), fmod(mission.elapsed, 60.0)]],
-		["GUARDS KILLED", str(mission.guards_killed) + " / 6"],
+		["GUARDS KILLED", "%d / %d" % [mission.guards_killed, mission.guard_total()]],
 		["BODIES FOUND", str(mission.alarm.bodies_found)],
 		["RESTARTS", str(mission.stats.restarts)]
 	]

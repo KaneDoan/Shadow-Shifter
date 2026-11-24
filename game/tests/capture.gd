@@ -22,7 +22,7 @@ func _capture() -> void:
 	mission.audio_manager.enabled = false
 	mission.player.input_enabled = false
 	mission.camera.position_smoothing_enabled = false
-	if view in ["gallery", "combat", "pause", "results"]:
+	if view in ["gallery", "combat", "pause", "results", "dialogue"]:
 		mission.player.attach_anchor(mission.anchors["statue"])
 	if view == "study":
 		mission.lights_off = true
@@ -33,6 +33,16 @@ func _capture() -> void:
 		await process_frame
 	if view == "help":
 		mission.ui.show_help("title")
+	if view == "intro":
+		mission.ui.intro_index = 0
+		mission.ui.intro_clock = 5.0
+		mission.ui.set_screen("intro")
+	if view == "dialogue":
+		mission.ui.dialogue.played.clear()
+		mission.ui.dialogue.queue.clear()
+		mission.ui.dialogue.current = []
+		mission.ui.dialogue.play("gallery")
+		mission.ui.dialogue.shown = 999.0
 	if view == "pause":
 		mission.ui.pause_game()
 	if view == "results":
