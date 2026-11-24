@@ -1,5 +1,7 @@
 # ShadowShift
 
+Made for the Game Off 2026 game jam (theme: Shift).
+
 A complete, replayable top-down stealth and one-hit sword mission in Blackglass Manor. Slip in through the kitchen garden and servants' hall, ride guards' shadows, extinguish the study lamp, reach Lord Veyr and escape. Detection starts combat and a timed escape alarm.
 
 ## Play
