@@ -35,8 +35,8 @@ func _ready() -> void:
 	collider.shape = circle
 	add_child(collider)
 	visual = preload("res://actors/actor_visual.gd").new()
-	# Featureless base body tinted violet so the assassin reads as a living shadow.
-	visual.tint = Color(0.5, 0.42, 0.85)
+	# The assassin sprite carries her own crimson-and-black palette, so it is not tinted.
+	visual.tint = Color.WHITE
 	add_child(visual)
 	last_safe_position = global_position
 

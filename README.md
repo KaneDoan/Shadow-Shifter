@@ -2,7 +2,7 @@
 
 Made for the Game Off 2026 game jam (theme: Shift).
 
-A complete, replayable top-down stealth and one-hit sword mission in Blackglass Manor. Slip in through the kitchen garden and servants' hall, ride guards' shadows, extinguish the study lamp, reach Lord Veyr and escape. Detection starts combat and a timed escape alarm.
+A complete, replayable top-down stealth and one-hit sword mission in Blackglass Manor. Slip in through the kitchen garden and servants' hall, ride guards' shadows, extinguish the study lamp, reach Lord Oswald and escape. Detection starts combat and a timed escape alarm.
 
 ## Play
 
@@ -30,7 +30,7 @@ Purple rings are shadows; dim rings are inactive. Walls and closed doors block s
 
 ## Story and dialogue
 
-`game/data/dialogue.json` holds the intro cards (shown once per session after Enter the Manor; click or Space advances, Esc skips) and the in-mission subtitle lines. Each conversation is keyed by the event that triggers it (`mission_start`, `first_ride`, `hall`, `courtyard`, `gallery`, `first_kill`, `key`, `lights_off`, `study`, `alarm`), plays once per run, and never pauses play. Edit the text there; triggers live in `game/ui/game_ui.gd`.
+`game/data/dialogue.json` holds the intro cards (shown once per session after Enter the Manor) and two short cutscenes: `mission_start` and `study` (confronting Lord Oswald). A cutscene plays once per run and freezes play, so neither you nor the guards move until it ends. Click, Space or Enter advances a line and Esc skips. Triggers live in `game/ui/game_ui.gd`.
 
 ## Verify and rebuild
 

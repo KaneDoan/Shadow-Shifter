@@ -94,7 +94,7 @@ func _ready() -> void:
 		world.add_child(enemy)
 		enemy.died.connect(_on_enemy_died)
 		enemies[data["id"]] = enemy
-	enemies["veyr"].shadow_anchor.set_active(false)
+	enemies["oswald"].shadow_anchor.set_active(false)
 	player.attach_anchor(anchors[Data.START_ANCHOR])
 	camera = Camera2D.new()
 	camera.position_smoothing_enabled = true
@@ -194,7 +194,7 @@ func _physics_process(delta: float) -> void:
 				break
 	if alarm.active:
 		alarm.tick(delta)
-		var boss = enemies["veyr"]
+		var boss = enemies["oswald"]
 		if is_instance_valid(escape_curve) and boss.is_alive():
 			var destination := escape_curve.sample_baked(escape_curve.get_baked_length() * alarm.progress)
 			var offset: Vector2 = destination - boss.global_position
@@ -202,7 +202,7 @@ func _physics_process(delta: float) -> void:
 				boss.facing = offset.normalized()
 			boss.global_position = destination
 		if alarm.remaining <= 0.0:
-			fail("Lord Veyr escaped")
+			fail("Lord Oswald escaped")
 	queue_redraw()
 
 func try_interact(actor: Node) -> bool:
@@ -213,7 +213,7 @@ func try_interact(actor: Node) -> bool:
 		level.lights_off = true
 		level.queue_redraw()
 		anchors["curtain"].set_active(true)
-		enemies["veyr"].shadow_anchor.set_active(true)
+		enemies["oswald"].shadow_anchor.set_active(true)
 		shadow_system.show_feedback("LIGHTS OUT — THE STUDY SHADOWS AWAKEN")
 		feedback_event.emit("switch", Data.SWITCH, Vector2.ZERO)
 		return true
@@ -238,10 +238,10 @@ func confirm_detection(_guard: Node) -> void:
 		return
 	alarm.start()
 	_begin_escape()
-	shadow_system.show_feedback("SPOTTED — VEYR IS FLEEING")
+	shadow_system.show_feedback("SPOTTED — OSWALD IS FLEEING")
 
 func _begin_escape() -> void:
-	var boss = enemies["veyr"]
+	var boss = enemies["oswald"]
 	boss.escape_override = true
 	escape_curve = Curve2D.new()
 	escape_curve.add_point(boss.global_position)
@@ -311,7 +311,7 @@ func objective() -> String:
 	if phase == "won":
 		return "Target eliminated. The dark remembers."
 	if alarm.active:
-		return "Intercept Lord Veyr before he escapes"
+		return "Intercept Lord Oswald before he escapes"
 	if not entered_hall:
 		return "Slip through the kitchen garden into the servants' hall"
 	if not reached_courtyard:
@@ -320,7 +320,7 @@ func objective() -> String:
 		return "Ride the gatekeeper through the gate"
 	if not lights_off:
 		return "Reach the lamp alcove and extinguish the chandelier"
-	return "Ride into the study. Eliminate Lord Veyr."
+	return "Ride into the study. Eliminate Lord Oswald."
 
 func context_prompt() -> String:
 	if player.is_hidden():

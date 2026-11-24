@@ -10,10 +10,9 @@ Selected characters and dungeon art by **CraftPix** from the user's local librar
 Manor art pass (characters and Blackglass Manor visuals), imported by `tools/prepare_manor_art.py`:
 
 - `nobles-manor-pixel-top-down-tileset-asset-pack` — floors, walls, props, fountain, gargoyle
-- `free-base-4-direction-male-character-pixel-art` — the assassin (tinted violet in game)
 - `free-swordsman-1-3-level-pixel-top-down-sprite-character-pack` — guards (level 3)
 - `archer-1-3-level-pixel-top-down-sprite-character` — watchmen (level 2)
-- `free-vampire-4-direction-pixel-character-sprite-pack` — Lord Veyr
+- `free-vampire-4-direction-pixel-character-sprite-pack` — Lord Oswald
 
 - `simplified-medieval-gothic-pixel-font-for-video-games` — `Simplified Gothic` display font (menus, headings, speaker names)
 
@@ -32,6 +31,10 @@ Godot code and project assembly assisted by Codex. Local Qwen summarized the GDD
 ## Engine
 
 Made with [Godot Engine](https://godotengine.org/), MIT license. Engine third-party notices accompany exported builds where required.
+
+## Player character
+
+The assassin (Ruby Azazel) is the user's own character design, generated as pixel art with [PixelLab](https://pixellab.ai) (character `307c6325-822c-4f57-af48-c82906f8aec8`: pro rotations; idle, walk, hurt and death templates; custom dagger-slash animation) and converted to game strips by `tools/import_pixellab_character.py`.
 
 ## Pixel effects
 

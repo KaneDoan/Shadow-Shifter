@@ -21,8 +21,7 @@ ANIMATIONS = ['idle', 'walk', 'attack', 'hurt', 'death']
 
 # role -> (pack, member pattern with {anim}, row index for D, S (right-facing), U)
 CHARACTERS = {
-    'assassin': ('free-base-4-direction-male-character-pixel-art',
-                 'PNG/Sword/Without_shadow/Sword_{anim}_without_shadow.png', (0, 2, 3)),
+    # The assassin is now a PixelLab character; see tools/import_pixellab_character.py.
     'guard': ('free-swordsman-1-3-level-pixel-top-down-sprite-character-pack',
               'PNG/Swordsman_lvl3/Without_shadow/Swordsman_lvl3_{anim}_without_shadow.png', (0, 2, 3)),
     'watchman': ('archer-1-3-level-pixel-top-down-sprite-character',

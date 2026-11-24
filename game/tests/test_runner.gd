@@ -78,15 +78,32 @@ func _test_dialogue() -> void:
 	bar.played.clear()
 	bar.queue.clear()
 	bar.current = []
-	check(bar.play("gallery"), "conversation starts")
-	check(not bar.play("gallery"), "conversation plays once per run")
-	check(bar.is_speaking() and bar.queue.size() == bar.lines["gallery"].size() - 1, "lines queue in order")
-	bar._process(30.0)
-	check(int(bar.shown) == String(bar.current[1]).length(), "line types out fully")
+	check(bar.lines.size() <= 3, "dialogue is limited to a few short cutscenes")
+	mission.test_mode = false
+	check(mission.ui.start_cutscene("study"), "cutscene starts")
+	check(paused and mission.ui.screen_mode == "cutscene", "cutscene freezes play")
+	check(not mission.ui.start_cutscene("study"), "cutscene plays once per run")
+	var player_before: Vector2 = mission.player.global_position
+	mission.player.movement_override = Vector2.RIGHT
+	await create_timer(0.1, true, false, true).timeout
+	check(mission.player.global_position == player_before, "player cannot move during a cutscene")
+	mission.player.movement_override = Vector2.ZERO
 	var first: Array = bar.current
-	bar._process(30.0)
-	check(bar.current != first, "line advances after its reading time")
-	check(bar.play("alarm", true) and String(bar.current[1]) == String(bar.lines["alarm"][0][1]), "urgent conversation interrupts")
+	check(bar.advance() and bar.current == first, "first press completes the typing")
+	check(bar.advance() and bar.current != first, "next press advances to the next line")
+	var space := InputEventKey.new()
+	space.physical_keycode = KEY_SPACE
+	space.pressed = true
+	mission.ui._input(space)
+	mission.ui._input(space)
+	check(not paused and mission.ui.screen_mode == "playing" and not bar.is_speaking(), "finishing the cutscene resumes play")
+	mission.ui.start_cutscene("mission_start")
+	var skip_key := InputEventKey.new()
+	skip_key.physical_keycode = KEY_ESCAPE
+	skip_key.pressed = true
+	mission.ui._input(skip_key)
+	check(not paused and mission.ui.screen_mode == "playing", "Escape skips a cutscene")
+	mission.test_mode = true
 	# Intro cards: shown once per session, then the mission starts.
 	mission.phase = "title"
 	mission.ui.set_screen("title")
@@ -383,7 +400,7 @@ func _test_alarm() -> void:
 	check(alarm.remaining == 70.0 and alarm.bodies_found == 1, "duplicate cannot cap or extend timer")
 	alarm.discover_body(2)
 	check(alarm.remaining == 45.0, "second body caps remaining at 45 seconds")
-	check(alarm.progress == prior_progress, "timer cap does not move Veyr backward")
+	check(alarm.progress == prior_progress, "timer cap does not move Oswald backward")
 	alarm.tick(40.0)
 	alarm.discover_body(3)
 	check(alarm.remaining == 5.0, "later discovery cannot extend short timer")
@@ -411,9 +428,9 @@ func _test_mission() -> void:
 	current_scene = mission
 	await settle()
 	Engine.time_scale = 8.0
-	check(mission.enemies.size() == 11, "ten guards plus Lord Veyr exist")
+	check(mission.enemies.size() == 11, "ten guards plus Lord Oswald exist")
 	check(mission.player.is_hidden() and mission.player.current_anchor == mission.anchors["cart"], "mission starts safely hidden in the kitchen garden")
-	check(not mission.anchors["curtain"].active and not mission.enemies["veyr"].shadow_anchor.active, "study shadows start inactive")
+	check(not mission.anchors["curtain"].active and not mission.enemies["oswald"].shadow_anchor.active, "study shadows start inactive")
 	var ghost_ok: bool = await complete_ghost_route(mission)
 	check(ghost_ok and mission.phase == "won", "actual shadow-riding ghost route completes")
 	check(mission.guards_killed == 0 and not mission.alarm.active, "ghost completion has no guard kills or alarm")
@@ -469,7 +486,7 @@ func finish_from_statue(mission: Node) -> bool:
 	if not player.emerge() or not mission.try_interact(player):
 		printerr("SCENARIO: lamp interaction failed")
 		return false
-	check(mission.lights_off and mission.anchors["curtain"].active and mission.enemies["veyr"].shadow_anchor.active, "lamp activates curtain and Veyr anchors")
+	check(mission.lights_off and mission.anchors["curtain"].active and mission.enemies["oswald"].shadow_anchor.active, "lamp activates curtain and Oswald anchors")
 	if not player.request_shift(mission.anchors["cupboard"]):
 		return false
 	if not await shift_when_reachable(mission, mission.enemies["watchman"].shadow_anchor):
@@ -482,7 +499,7 @@ func finish_from_statue(mission: Node) -> bool:
 		return false
 	if not await shift_when_reachable(mission, mission.anchors["curtain"]):
 		return false
-	if not await shift_when_reachable(mission, mission.enemies["veyr"].shadow_anchor):
+	if not await shift_when_reachable(mission, mission.enemies["oswald"].shadow_anchor):
 		return false
 	return player.request_attack()
 

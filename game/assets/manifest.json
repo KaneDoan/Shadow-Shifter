@@ -73,93 +73,93 @@
   },
   {
     "file": "game\\assets\\characters\\assassin\\D_idle.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Idle_without_shadow.png (row 0)",
-    "sha256": "0227f4211cbef08ea3d4229bbae75470ad2a6f3e60a112c55f8ac5b850976c40"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/idle/south",
+    "sha256": "173f048b688e6b05a46cfd584a2598aa4e9f292aad94205689eff534fb8ec0d0"
   },
   {
     "file": "game\\assets\\characters\\assassin\\S_idle.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Idle_without_shadow.png (row 2)",
-    "sha256": "9bcceb80301fb74383899a8a6e4ea10e7cdd67cba493365d99ffc8ce908f0d66"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/idle/east",
+    "sha256": "f6f4b2599095f34a94d4848436689d7dfd6b3c34a6038db5b04daa1509fc62be"
   },
   {
     "file": "game\\assets\\characters\\assassin\\U_idle.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Idle_without_shadow.png (row 3)",
-    "sha256": "086aa21bf71ede0b3056c7235732179238d674426fcaf22efe0a9b32e9286dfe"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/idle/north",
+    "sha256": "0395a99438dd7b3d09074460ecb067883b3d79ba88cee71489a2592aa4196b75"
   },
   {
     "file": "game\\assets\\characters\\assassin\\D_walk.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Walk_without_shadow.png (row 0)",
-    "sha256": "145065c7c61560ce8ac28723a2dca812016e6a9902011b869c3aeb2577067091"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/walk/south",
+    "sha256": "0aad4a6306971de9cf16991be665efd506d9b3c958190aa6dc61f38ed9d6c7bf"
   },
   {
     "file": "game\\assets\\characters\\assassin\\S_walk.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Walk_without_shadow.png (row 2)",
-    "sha256": "920756ffbc1240d929a38cc12824f49adf1ed04253c303f82aede83ddafff6a4"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/walk/east",
+    "sha256": "2bec63617a76f32afe6ff13ed2f00e64d435b08280e8f279808ef6355ed35980"
   },
   {
     "file": "game\\assets\\characters\\assassin\\U_walk.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Walk_without_shadow.png (row 3)",
-    "sha256": "ff75bd5b861845c523dc8747df38e55b1ca875b983bcdfc78599174db4fc6286"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/walk/north",
+    "sha256": "ebe3e8605132524432309078e981a42fe46e11e7b358a49856acf8f17e3f73e2"
   },
   {
     "file": "game\\assets\\characters\\assassin\\D_attack.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_attack_without_shadow.png (row 0)",
-    "sha256": "a5bd859a4b8acec5e60b138aa694f8809235b8e0ce471cbf9c21e6e18bd65128"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/attack/south",
+    "sha256": "c40c0b23fe81b4c1a12b6826928fb2a5a0cfb17de8c526e8e13a3e850afccb7c"
   },
   {
     "file": "game\\assets\\characters\\assassin\\S_attack.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_attack_without_shadow.png (row 2)",
-    "sha256": "3dfaac4c0af6807ae120cc5ab81b479365c718305a210770346108c56fcc3c16"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/attack/east",
+    "sha256": "be1afdaaea86c1b1c9d58b5fbf4fd55a4fd34d850c13a77e6b6a58fb935fd3b8"
   },
   {
     "file": "game\\assets\\characters\\assassin\\U_attack.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_attack_without_shadow.png (row 3)",
-    "sha256": "9ce12856e1762626386ac4a8334dc6737a2f1c4c3ada196989ee1109058cbca0"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/attack/north",
+    "sha256": "a80846638571552294df02f6f0e730007126d708c6b310a2028c18442de9d3b0"
   },
   {
     "file": "game\\assets\\characters\\assassin\\D_hurt.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Hurt_without_shadow.png (row 0)",
-    "sha256": "f8d82a7b779912ee8ea9471827e8beec05e190f7c8c703245e5ecc7708ce7a1d"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/hurt/south",
+    "sha256": "17c61bc4596222d2c2571bb062fcd69ce4f36975fd1d905ac37dbc0a71f12b41"
   },
   {
     "file": "game\\assets\\characters\\assassin\\S_hurt.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Hurt_without_shadow.png (row 2)",
-    "sha256": "804ad9dea04856744aa3f3317a3cbb3d1776f2261915188d7be820c6e01fdb5d"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/hurt/east",
+    "sha256": "c674452f124d14d152d0e87c78ad6e7a0b3cc9453a15cf5a266eee012645ac1a"
   },
   {
     "file": "game\\assets\\characters\\assassin\\U_hurt.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Hurt_without_shadow.png (row 3)",
-    "sha256": "277756c05f739de4a3cb8bbbb24a01cb1dfb678291d251844d59100032ba3ed6"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/hurt/north",
+    "sha256": "2b7b8ce149de857b9012219a38214031e660917e1259760d334acc11da5a71cc"
   },
   {
     "file": "game\\assets\\characters\\assassin\\D_death.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Death_without_shadow.png (row 0)",
-    "sha256": "949fba2e9b1eef74db7ef993a1c665bcade2e1ec065f00d765a47af5517642e6"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/death/south",
+    "sha256": "c2b675ab482cfaef036c20461f2d13bc2496e53e9f393182632d468fa00e7940"
   },
   {
     "file": "game\\assets\\characters\\assassin\\S_death.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Death_without_shadow.png (row 2)",
-    "sha256": "db3f0ec8b4752d63b5c5c1392d8f8927c9707cfa876b962501a981e012a5fc83"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/death/east",
+    "sha256": "b5aacb70e1b8abe87497f49485619331f161f6efc347e1052d482da1f8e071c8"
   },
   {
     "file": "game\\assets\\characters\\assassin\\U_death.png",
-    "source_archive": "D:\\Game Assets\\2D Assets\\CraftPixLibrary\\packs\\free-base-4-direction-male-character-pixel-art\\craftpix-net-555940-free-base-4-direction-male-character-pixel-art.zip",
-    "member": "PNG/Sword/Without_shadow/Sword_Death_without_shadow.png (row 3)",
-    "sha256": "5d6a94528c831daef05744e7de900d75b314f17de179fc250d5ae3c51eb12747"
+    "source_archive": "PixelLab character 307c6325-822c-4f57-af48-c82906f8aec8",
+    "member": "animations/death/north",
+    "sha256": "32c0624bfac714e5894761810f03bdfd514fbe663469c4054d29fdc65df00450"
   },
   {
     "file": "game\\assets\\characters\\guard\\D_idle.png",

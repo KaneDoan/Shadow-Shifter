@@ -29,9 +29,8 @@ func _ready() -> void:
 	display_font = gothic
 	dialogue = preload("res://ui/dialogue_bar.gd").new()
 	dialogue.display_font = display_font
-	dialogue.can_advance = func(): return screen_mode == "playing"
+	dialogue.can_advance = func(): return screen_mode == "cutscene"
 	add_child(dialogue)
-	mission.feedback_event.connect(_on_feedback)
 	button("Enter the Manor", Rect2(40, 222, 220, 34), ["title"], _start, true)
 	button("How to Play", Rect2(40, 268, 140, 27), ["title"], func(): show_help("title"))
 	button("Quit", Rect2(192, 268, 68, 27), ["title"], func(): get_tree().quit())
@@ -102,27 +101,26 @@ func _ui_sound() -> void:
 	if is_instance_valid(mission) and is_instance_valid(mission.audio_manager):
 		mission.audio_manager.play("switch", -22.0)
 
-func _on_feedback(kind: String, _at: Vector2, _direction: Vector2) -> void:
-	match kind:
-		"key": dialogue.play("key")
-		"switch": dialogue.play("lights_off")
-		"alarm": dialogue.play("alarm", true)
-		"kill": dialogue.play("first_kill")
-
 func _update_dialogue_triggers() -> void:
-	if screen_mode != "playing" or mission.phase != "playing":
+	# Dialogue only happens in short cutscenes; automated tests play straight through.
+	if screen_mode != "playing" or mission.phase != "playing" or mission.test_mode or mission.alarm.active:
 		return
-	dialogue.play("mission_start")
-	if mission.player.state == mission.player.State.RIDING:
-		dialogue.play("first_ride")
-	if mission.entered_hall:
-		dialogue.play("hall")
-	if mission.reached_courtyard:
-		dialogue.play("courtyard")
-	if mission.visited_gallery:
-		dialogue.play("gallery")
-	if mission.level.zone_name(mission.player.global_position) == "VEYR'S STUDY":
-		dialogue.play("study")
+	start_cutscene("mission_start")
+	if mission.level.zone_name(mission.player.global_position) == "OSWALD'S STUDY":
+		start_cutscene("study")
+
+## Freezes the whole scene (player, guards, timers) until the conversation is dismissed.
+func start_cutscene(id: String) -> bool:
+	if not dialogue.play(id):
+		return false
+	get_tree().paused = true
+	set_screen("cutscene")
+	return true
+
+func end_cutscene() -> void:
+	dialogue.skip()
+	get_tree().paused = false
+	set_screen("playing")
 
 func _return_title() -> void:
 	mission.stats.has_started = false
@@ -153,6 +151,22 @@ func _input(event: InputEvent) -> void:
 			elif event.physical_keycode in [KEY_SPACE, KEY_ENTER]:
 				_advance_intro()
 		get_viewport().set_input_as_handled()
+		return
+	if screen_mode == "cutscene":
+		var pressed: bool = event.is_pressed() and not event.is_echo()
+		if pressed and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if not dialogue.advance():
+				end_cutscene()
+		elif pressed and event is InputEventKey:
+			if event.physical_keycode == KEY_ESCAPE:
+				end_cutscene()
+			elif event.physical_keycode in [KEY_SPACE, KEY_ENTER]:
+				if not dialogue.advance():
+					end_cutscene()
+			elif event.physical_keycode == KEY_R:
+				mission.request_restart()
+		if event is InputEventMouseButton or event is InputEventKey:
+			get_viewport().set_input_as_handled()
 		return
 	if not event is InputEventKey or not event.pressed or event.echo:
 		return
@@ -205,6 +219,12 @@ func _draw() -> void:
 		return
 	if screen_mode == "playing":
 		_draw_hud()
+	elif screen_mode == "cutscene":
+		_draw_hud()
+		# Letterbox bars mark that play is frozen while characters speak.
+		draw_rect(Rect2(0, 0, 640, 48), Color(0, 0, 0, 0.9))
+		draw_rect(Rect2(0, 330, 640, 30), Color(0, 0, 0, 0.9))
+		label("Esc  Skip", Vector2(574, 349), 9, MUTED)
 	elif screen_mode == "title":
 		_draw_title()
 	elif screen_mode == "intro":
@@ -304,8 +324,8 @@ func _draw_minimap() -> void:
 	for anchor in mission.anchors.values():
 		draw_circle(origin + anchor.global_position * scale_map, 1.1, VIOLET if anchor.active else Color("4d465d"))
 	draw_circle(origin + mission.player.global_position * scale_map, 2.0, CYAN)
-	if mission.enemies["veyr"].is_alive():
-		draw_circle(origin + mission.enemies["veyr"].global_position * scale_map, 1.7, Color("e88694"))
+	if mission.enemies["oswald"].is_alive():
+		draw_circle(origin + mission.enemies["oswald"].global_position * scale_map, 1.7, Color("e88694"))
 	label("%02d:%02d   %d / %d" % [floori(mission.elapsed / 60), int(mission.elapsed) % 60, mission.guards_killed, mission.guard_total()], Vector2(540, 320), 9, MUTED)
 
 func _draw_help() -> void:
@@ -324,7 +344,7 @@ func _draw_help() -> void:
 		label(rows[index][1], Vector2(203, 113 + index * 27), 10, INK)
 	draw_line(Vector2(40, 241), Vector2(600, 241), Color("3e3550"), 1)
 	label("One hit kills. Watch the amber wind-up; move before the red strike.", Vector2(40, 263), 11, CYAN)
-	label("Guards are routes. A body or a witness starts Veyr's escape.", Vector2(40, 283), 11, MUTED)
+	label("Guards are routes. A body or a witness starts Oswald's escape.", Vector2(40, 283), 11, MUTED)
 
 func _draw_results() -> void:
 	var success := screen_mode == "won"

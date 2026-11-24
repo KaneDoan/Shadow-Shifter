@@ -1,7 +1,7 @@
 extends Control
-## Subtitle-style dialogue: one speaker line at a time in a bar above the prompt strip.
-## Lines come from data/dialogue.json, type out, hold for a reading time, then advance.
-## It never pauses play or takes input, because clicks in this game mean shift/strike.
+## Cutscene dialogue: one speaker line at a time in a bar above the prompt strip.
+## Lines come from data/dialogue.json and type out. The UI freezes play while a cutscene
+## runs and calls advance() on click/Space/Enter or skip() on Esc.
 
 const DATA_PATH := "res://data/dialogue.json"
 const BAR := Rect2(16, 276, 500, 50)
@@ -17,7 +17,6 @@ var played: Dictionary = {}
 var queue: Array = []
 var current: Array = []
 var shown := 0.0
-var hold := 0.0
 var can_advance: Callable = func(): return true
 
 func _ready() -> void:
@@ -52,8 +51,23 @@ func is_speaking() -> bool:
 func _next() -> void:
 	current = queue.pop_front() if not queue.is_empty() else []
 	shown = 0.0
-	if not current.is_empty():
-		hold = 1.1 + String(current[1]).length() * 0.045
+	queue_redraw()
+
+## First press finishes the typing; the next moves on. Returns true while lines remain.
+func advance() -> bool:
+	if current.is_empty():
+		return false
+	var length := String(current[1]).length()
+	if shown < length:
+		shown = length
+	else:
+		_next()
+	queue_redraw()
+	return is_speaking()
+
+func skip() -> void:
+	queue.clear()
+	current = []
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -61,17 +75,10 @@ func _process(delta: float) -> void:
 		return
 	# Redraw even while held, so the bar disappears behind menus instead of lingering.
 	queue_redraw()
-	if get_tree().paused or not can_advance.call():
+	if not can_advance.call():
 		return
 	var step := delta / maxf(0.01, Engine.time_scale)
-	var length := String(current[1]).length()
-	if shown < length:
-		shown = minf(length, shown + step * CHARS_PER_SECOND)
-	else:
-		hold -= step
-		if hold <= 0.0:
-			_next()
-	queue_redraw()
+	shown = minf(String(current[1]).length(), shown + step * CHARS_PER_SECOND)
 
 func _draw() -> void:
 	if current.is_empty() or not can_advance.call():
@@ -84,3 +91,5 @@ func _draw() -> void:
 	draw_string(display_font if display_font else body_font, BAR.position + Vector2(12, 18), String(names.get(speaker, speaker.capitalize())), HORIZONTAL_ALIGNMENT_LEFT, -1, 16, color)
 	var text := String(current[1]).substr(0, int(shown))
 	draw_multiline_string(body_font, BAR.position + Vector2(12, 34), text, HORIZONTAL_ALIGNMENT_LEFT, BAR.size.x - 24, 11, 2, Color("e9e4f6"))
+	if int(shown) >= String(current[1]).length():
+		draw_string(body_font, BAR.position + Vector2(BAR.size.x - 112, BAR.size.y - 6), "Click / Space  ›", HORIZONTAL_ALIGNMENT_LEFT, -1, 9, Color(0.6, 0.58, 0.72))

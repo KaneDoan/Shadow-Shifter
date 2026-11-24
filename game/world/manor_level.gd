@@ -214,7 +214,7 @@ func _draw() -> void:
 	_prop(exterior_texture, Rect2(195, 193, 67, 51), Vector2(512, 588))           # Statue: gargoyle
 	_prop(exterior_texture, Rect2(4, 356, 57, 39), Vector2(608, 584))             # Bench
 	_prop(interior_texture, Rect2(72, 14, 47, 58), Vector2(592, 134))             # Cupboard: bookshelf
-	_prop(interior_texture, Rect2(309, 145, 53, 33), Vector2(1008, 290))          # Veyr's desk
+	_prop(interior_texture, Rect2(309, 145, 53, 33), Vector2(1008, 290))          # Oswald's desk
 	_prop(interior_texture, Rect2(7, 146, 40, 37), Vector2(1056, 300))
 	_prop(interior_texture, Rect2(8, 14, 47, 58), Vector2(880, 220))
 	# Study curtain: heavy velvet by the moonlit window; it darkens with the lamp out.

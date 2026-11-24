@@ -1,56 +1,24 @@
 {
-  "_comment": "intro = story cards shown once per session after ENTER THE MANOR (click/Space advances, Esc skips). lines = subtitle conversations keyed by event; each plays at most once per run and never pauses play. A line is [speaker, text]. Speaker colours live in speakers; display names in names (gothic capitals are hard to read, so use title case).",
+  "_comment": "intro = story cards shown once per session after ENTER THE MANOR (click/Space advances, Esc skips). lines = cutscenes keyed by event; each plays at most once per run and freezes play until the last line is dismissed (click/Space/Enter advances, Esc skips). A line is [speaker, text]. Speaker colours live in speakers; display names in names.",
   "speakers": {
     "YOU": "ac7cf2",
-    "GUARD": "e8bb70",
-    "WATCHMAN": "e8d18a",
-    "VEYR": "f08a9b"
+    "OSWALD": "f08a9b"
   },
   "names": {
     "YOU": "You",
-    "GUARD": "Guard",
-    "WATCHMAN": "Watchman",
-    "VEYR": "Lord Veyr"
+    "OSWALD": "Lord Oswald"
   },
   "intro": [
-    "Blackglass Manor. Midnight.\n\nAt dawn Lord Veyr sails for the coast, and his ledger sails with him: every name he ever sold.",
-    "Yours was one of them.\n\nThey buried you in the dark. You came back as part of it.",
-    "Slip into any shadow close by. Even a guard's.\nPut out the study lamp. Reach Veyr.\n\nOne strike. No witnesses."
+    "Blackglass Manor. Midnight.\n\nAt dawn Lord Oswald sails for the coast with a ledger of every name he ever sold. Yours was one of them.",
+    "Slip into any shadow close by. Even a guard's.\nPut out the study lamp. Reach Oswald.\n\nOne strike. No witnesses."
   ],
   "lines": {
     "mission_start": [
-      ["YOU", "The kitchen garden. Servants come and go all night, and their shadows go wherever I need."]
-    ],
-    "hall": [
-      ["GUARD", "Steward wants the silver crated before dawn. All of it."],
-      ["GUARD", "Then the steward can carry it himself."]
-    ],
-    "courtyard": [
-      ["YOU", "The gatekeeper holds the only key. I don't need the key. I need his shadow."]
-    ],
-    "first_ride": [
-      ["YOU", "He doesn't feel a thing. They never do."]
-    ],
-    "gallery": [
-      ["GUARD", "Third night on watch. His lordship's packing like the house is on fire."],
-      ["WATCHMAN", "Keep your voice down. And keep your eyes on the dark."]
-    ],
-    "first_kill": [
-      ["YOU", "One carrier fewer. Someone will find him soon."]
-    ],
-    "key": [
-      ["YOU", "His key. Louder than a shadow, but it opens the gate."]
-    ],
-    "lights_off": [
-      ["VEYR", "Who put out the lamp? Bring a candle. Now."],
-      ["YOU", "The moon does the rest."]
+      ["YOU", "The kitchen garden. Their shadows will carry me in."]
     ],
     "study": [
-      ["VEYR", "Every name in that ledger paid for this house. Let them come and read it."]
-    ],
-    "alarm": [
-      ["GUARD", "A body! Get his lordship to the carriage!"],
-      ["VEYR", "Leave the ledger. Move!"]
+      ["OSWALD", "Every name in that ledger paid for this house."],
+      ["YOU", "Then yours will be the last."]
     ]
   }
 }

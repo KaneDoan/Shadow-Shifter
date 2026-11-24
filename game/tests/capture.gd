@@ -27,7 +27,7 @@ func _capture() -> void:
 	if view == "study":
 		mission.lights_off = true
 		mission.anchors["curtain"].set_active(true)
-		mission.enemies["veyr"].shadow_anchor.set_active(true)
+		mission.enemies["oswald"].shadow_anchor.set_active(true)
 		mission.player.attach_anchor(mission.anchors["curtain"])
 	for frame in range(20):
 		await process_frame
